@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
-  "author": "Igor Konovalov",
+  "author": "codeunited.ru",
   "license": "LGPLv3",
   "dependencies": {
     "ipfs-api": "^9.0.0",
