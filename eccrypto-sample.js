@@ -2,7 +2,7 @@
  * Created by ikonovalov on 21/10/16.
  */
 const crypto = require('crypto');
-const ecwrapper = require('./ec-wrapper.js');
+const ecwrapper = require('./lib/ec-wrapper.js');
 
 const datadir = require('path').join('/mnt/u110/ethereum', 'pnet1');
 
