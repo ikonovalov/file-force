@@ -37,27 +37,28 @@ let secret12 = cryptoUtils.deriveSecretKey(agreementDHKey12);
 const AES_256_CTR_BASE64 = {algorithm: 'aes-256-ctr', cipherEncoding: 'base64'};
 
 // STAGE 1 - encrypt message, message signature with random secret key, and secret key with agreement key
-let originalMessage = 'this is a plain text';
-console.log(`Alice says: ${originalMessage}`);
+let originalMessage = 'this is a plain text'; // should be IPFS hash
+console.log(`Alice says: '${originalMessage}'`);
 
 let signedMsg = cryptoUtils.sign(originalMessage, privateKey1);
-let derEncodedSignature = Buffer.from(signedMsg.toDER());
+let encodedSignature = signedMsg.toString('base64');
 
 let randomSecret = cryptoUtils.randomKey(32);
+let combinedMessage = {
+    data: originalMessage,
+    signature: encodedSignature
+};
 
-
-let encryptedMessage = cryptoUtils.encrypt(originalMessage, randomSecret, AES_256_CTR_BASE64);
-let encryptedSignature = cryptoUtils.encrypt(derEncodedSignature, randomSecret, AES_256_CTR_BASE64);
+let encryptedMessage = cryptoUtils.encrypt(JSON.stringify(combinedMessage), randomSecret, AES_256_CTR_BASE64);
 let encryptedMasterKey = cryptoUtils.encrypt(randomSecret, secret12.key, AES_256_CTR_BASE64);
 
 let transferObject = {
     hkdf: secret12.hkdf,
     encryptedMasterKey: encryptedMasterKey,
-    encryptedMessage: encryptedMessage,
-    encryptedSignature: encryptedSignature
+    encryptedMessage: encryptedMessage
 };
 
-console.log(JSON.stringify(transferObject));
+console.log(`Transfer -> ${JSON.stringify(transferObject, ' ')}`);
 // STAGE 3 IPFS put and get
 
 
@@ -67,9 +68,18 @@ let agreementDHKey21 = cryptoUtils.deriveSharedKey(privateKey2, publicKey1);
 let secret21 = cryptoUtils.deriveSecretKey(agreementDHKey21, transferObject.hkdf);
 
 let decryptedMasterKey = cryptoUtils.decrypt(transferObject.encryptedMasterKey.ciphertext, secret21.key, {iv: transferObject.encryptedMasterKey.iv});
-let decryptedMessage = cryptoUtils.decrypt(transferObject.encryptedMessage.ciphertext, decryptedMasterKey, {iv: transferObject.encryptedMessage.iv});
-let decryptedSignature = cryptoUtils.decrypt(transferObject.encryptedSignature.ciphertext, decryptedMasterKey, {iv: transferObject.encryptedSignature.iv});
-console.log(`Bob receive: ${decryptedMessage}`);
+let decryptedCombinedMessage = JSON.parse(
+    cryptoUtils.decrypt(
+        transferObject.encryptedMessage.ciphertext,
+        decryptedMasterKey,
+        {
+            iv: transferObject.encryptedMessage.iv
+        }
+    )
+);
+let decryptedMessage = decryptedCombinedMessage.data;
+let decryptedSignature = decryptedCombinedMessage.signature;
+console.log(`Bob receive: '${decryptedMessage}'`);
 
 let verificationResult = cryptoUtils.verify(decryptedSignature, decryptedMessage, publicKey1);
 
