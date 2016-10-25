@@ -14,14 +14,14 @@ const accounts = [
 // ALICE
 var timerName = "Unlock key";
 console.time(timerName);
-const privateKey1 = cryptoUtils.recover(datadir, accounts[0], 'dlheu0');
+const privateKey1 = cryptoUtils.recoverPrivateKey(datadir, accounts[0], 'dlheu0');
 const publicKey1 = cryptoUtils.private2public(privateKey1);
 console.log("Alice's public key: " + publicKey1.toString('hex'));
 console.timeEnd(timerName);
 
 // BOB
 console.time(timerName);
-const privateKey2 = cryptoUtils.recover(datadir, accounts[1], 'dlheu0');
+const privateKey2 = cryptoUtils.recoverPrivateKey(datadir, accounts[1], 'dlheu0');
 const publicKey2 = cryptoUtils.private2public(privateKey2);
 console.log("Bob's public key: " + publicKey2.toString('hex'));
 console.timeEnd(timerName);
@@ -53,7 +53,7 @@ let encryptedMessage = cryptoUtils.encrypt(JSON.stringify(combinedMessage), rand
 let encryptedMasterKey = cryptoUtils.encrypt(randomSecret, secret12.key, AES_256_CTR_BASE64);
 
 let transferObject = {
-    hkdf: secret12.hkdf,
+    hkdf: secret12.hkdf,                            // params for secret key generation (=> DH + hkdf)
     encryptedMasterKey: encryptedMasterKey,
     encryptedMessage: encryptedMessage
 };
