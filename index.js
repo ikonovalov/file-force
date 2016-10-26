@@ -3,4 +3,4 @@
  */
 module.exports = {
     cryptoUtils: require('./lib/crypto-utils')
-}
+};
