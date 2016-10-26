@@ -2,7 +2,7 @@
  * Created by ikonovalov on 21/10/16.
  */
 const crypto = require('crypto');
-const cryptoUtils = require('./lib/crypto-utils.js');
+const cryptoUtils = require('./../lib/crypto-utils.js');
 
 const datadir = require('path').join('/mnt/u110/ethereum', 'pnet1');
 
@@ -37,15 +37,15 @@ let secret12 = cryptoUtils.deriveSecretKey(agreementDHKey12);
 const AES_256_CTR_BASE64 = {algorithm: 'aes-256-ctr', cipherEncoding: 'base64'};
 
 // STAGE 1 - encrypt message, message signature with random secret key, and secret key with agreement key
-let originalMessage = 'this is a plain text'; // should be IPFS hash
+let originalMessage = 'IPFS hash here'; // should be IPFS hash
 console.log(`Alice says: '${originalMessage}'`);
 
-let signedMsg = cryptoUtils.sign(originalMessage, privateKey1);
-let encodedSignature = signedMsg.toString('base64');
+let messageSignature = cryptoUtils.sign(originalMessage, privateKey1);
+let encodedSignature = messageSignature.toString('base64');
 
 let randomSecret = cryptoUtils.randomKey(32);
 let combinedMessage = {
-    data: originalMessage,
+    ipfs: originalMessage,
     signature: encodedSignature
 };
 
@@ -58,7 +58,7 @@ let transferObject = {
     encryptedMessage: encryptedMessage
 };
 
-console.log(`Transfer -> ${JSON.stringify(transferObject, ' ')}`);
+console.log(`Transfer -> ${JSON.stringify(transferObject)}`);
 // STAGE 3 IPFS put and get
 
 
@@ -77,10 +77,10 @@ let decryptedCombinedMessage = JSON.parse(
         }
     )
 );
-let decryptedMessage = decryptedCombinedMessage.data;
+let ipfsLink = decryptedCombinedMessage.ipfs;
 let decryptedSignature = decryptedCombinedMessage.signature;
-console.log(`Bob receive: '${decryptedMessage}'`);
+console.log(`Bob receive: '${ipfsLink}'`);
 
-let verificationResult = cryptoUtils.verify(decryptedSignature, decryptedMessage, publicKey1);
+let verificationResult = cryptoUtils.verify(decryptedSignature, ipfsLink, publicKey1);
 
 console.log(`Signature verification is ${verificationResult}`);
