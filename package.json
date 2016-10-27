@@ -2,16 +2,20 @@
   "name": "file-force",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "author": "Igor Konovalov",
+  "main": "cli.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ikonovalov/file-force.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node cli.js"
   },
   "bin": {
-    "fforce": "index.js"
+    "fforce": "./cli.js"
   },
-  "author": "codeunited.ru",
-  "license": "LGPLv3",
+  "license": "LGPL-3.0",
   "dependencies": {
     "colors": "^1.1.2",
     "commander": "^2.9.0",
