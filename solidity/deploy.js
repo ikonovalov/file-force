@@ -10,12 +10,12 @@ var fileforceContract = web3.eth.contract([{
 }, {"inputs": [], "type": "constructor"}, {
     "anonymous": false,
     "inputs": [{"indexed": false, "name": "author", "type": "address"}],
-    "name": "FileRegistred",
+    "name": "FileRegistered",
     "type": "event"
 }, {
     "anonymous": false,
-    "inputs": [{"indexed": false, "name": "autor", "type": "address"}],
-    "name": "FileUnregistred",
+    "inputs": [{"indexed": false, "name": "author", "type": "address"}],
+    "name": "FileUnregistered",
     "type": "event"
 }]);
 var fileforce = fileforceContract.new(

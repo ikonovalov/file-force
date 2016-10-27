@@ -18,9 +18,9 @@ contract FileForce {
 
     }
 
-    event FileRegistred(address author);
+    event FileRegistered(address author);
 
-    event FileUnregistred(address autor); 
+    event FileUnregistered(address author);
 
     // constructor
     function FileForce() {
