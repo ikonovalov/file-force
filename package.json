@@ -7,9 +7,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
+  "bin": {
+    "fforce": "index.js"
+  },
   "author": "codeunited.ru",
   "license": "LGPLv3",
   "dependencies": {
+    "colors": "^1.1.2",
+    "commander": "^2.9.0",
     "ethereumjs-util": "^4.5.0",
     "ipfs-api": "^9.0.0",
     "keythereum": "^0.2.6",
