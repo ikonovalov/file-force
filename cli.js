@@ -28,7 +28,7 @@ program.command('ipfs <command> [arg]')
     .action((command, arg) => {
             switch(command) {
                 case 'add':{
-                    files_ipfs_add(arg);
+                    ipfs_add(arg);
                     break;
                 }
             }
@@ -37,7 +37,7 @@ program.command('ipfs <command> [arg]')
 
 program.parse(process.argv); // notice that we have to parse in a new statement.
 
-function files_ipfs_add(path) {
+function ipfs_add(path) {
     ipfs.add(path, (error, result) => {
         if (!error) {
             result.forEach(rootBlock => {
