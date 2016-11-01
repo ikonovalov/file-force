@@ -9,27 +9,45 @@ const ipfs = new IPFS(config.ipfs.api);
 const colors = require('colors');
 const validator = require('validator');
 const fs = require('fs');
+const tmp = require('tmp');
 
 module.exports = {
 
     add: (path) => {
-        let stream = fs.createReadStream(path);
+        let originalStream = fs.createReadStream(path);
         let onetimeKey = libcrypto.randomKey();
-        let encFilePath = '/tmp/file.enc';
-        let encryptedStream = fs.createWriteStream(encFilePath);
 
-        libcrypto.encryptStream(stream, encryptedStream, onetimeKey, encryptionResult => {
+        let publishResult = (algorithm, iv, secret, ipfsHash) => {
+            console.log(`algorithm: ${algorithm}, iv: ${iv}, secret: ${secret}, ipfs-hash: ${ipfsHash}`)
+        };
 
+        tmp.file({prefix: 'force-'}, (err, tmpFilePath) => {
+            if (err) throw err;
+
+            const encryptedStream = fs.createWriteStream(tmpFilePath);
+
+            libcrypto.encryptStream(originalStream, encryptedStream, onetimeKey, (encryptionParams) => {
+
+                ipfs.add(tmpFilePath, (error, result) => {
+                    if (!error) {
+                        let rootBlock = result[0];
+                        publishResult(
+                            encryptionParams.algorithm,
+                            encryptionParams.iv,
+                            encryptionParams.secret,
+                            rootBlock.hash
+                        );
+
+                    } else {
+                        console.error(error);
+                    }
+                });
+
+            });
         });
 
-        ipfs.add(path, (error, result) => {
-            if (!error) {
-                result.forEach(rootBlock => {
-                    console.log(`${rootBlock.path}  -> ${rootBlock.hash}`);
-                })
-            } else {
-                console.error(error);
-            }
-        });
+
+
+
     },
 };
