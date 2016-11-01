@@ -2,6 +2,7 @@
 'use strict';
 const account = require('./cmd-account');
 const ipfs = require('./cmd-ipfs');
+const config = require('./cmd-config');
 const colors = require('colors');
 const program = require('commander');
 const validator = require('validator');
@@ -9,7 +10,7 @@ const validator = require('validator');
 program
     .version('0.0.1')
     .command('account <command> [arg]')
-    .description('Ethereum account operations. Commands: ls [balance], keys')
+    .description('Ethereum account operations. Commands: ls [balance], keys, config')
     .action((command, arg, options) => {
         switch (command) {
             case account.ls.name: {
@@ -37,6 +38,21 @@ program.command('ipfs <command> [arg]')
         }
 
     });
+
+program.command('config [command] [arg]')
+    .description('File-force configuration. Command: show')
+    .action((command, arg, options) => {
+       switch (command) {
+           case config.show.name: {
+               config.show(arg, options);
+               break;
+           }
+           default: {
+               config.show(arg, options);
+           }
+       }
+    });
+
 
 program.parse(process.argv); // notice that we have to parse in a new statement.
 
