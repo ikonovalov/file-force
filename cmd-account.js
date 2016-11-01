@@ -1,14 +1,15 @@
 /**
  * Created by ikonovalov on 01/11/16.
  */
-
-const ethereum = require('./lib/web3-utils');
-const ethereumKeys = require('./lib/crypto-utils');
+const config = require('yaml-config').readConfig('./config/app.yml');
+const ethereum = require('./lib/libweb3');
+const ethereumKeys = require('./lib/libcrypto');
 const colors = require('colors');
 const validator = require('validator');
 
 module.exports = {
     keys: (arg, options) => {
+        const dataDir = config.eth.datadir;
         const numberInput = validator.isInt(arg);
         const ethAccounts = ethereum.listAccounts();
 
@@ -26,11 +27,9 @@ module.exports = {
             hideEchoBack: true
         });
 
-        let privateKey = ethereumKeys.recoverPrivateKey(require('path').join('/mnt/u110/ethereum', 'pnet1'), account, password);
-        console.log(`Private key:\t${privateKey.toString('hex')}`);
-
-        let publicKey = ethereumKeys.private2public(privateKey);
-        console.log(`Public key:\t${publicKey.toString('hex')}`)
+        const keys = ethereumKeys.keyPair(dataDir, account, password);
+        console.log(`Private key:\t${keys.privateKey.toString('hex')}`);
+        console.log(`Public key:\t${keys.publicKey.toString('hex')}`)
     },
 
     ls: (arg, options) => {

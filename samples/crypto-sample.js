@@ -2,7 +2,7 @@
  * Created by ikonovalov on 21/10/16.
  */
 const crypto = require('crypto');
-const cryptoUtils = require('./../lib/crypto-utils.js');
+const cryptoUtils = require('./../lib/libcrypto.js');
 
 const datadir = require('path').join('/mnt/u110/ethereum', 'pnet1');
 

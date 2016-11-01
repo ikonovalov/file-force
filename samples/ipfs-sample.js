@@ -1,7 +1,7 @@
 /**
  * Created by ikonovalov on 26/10/16.
  */
-const IPFS = require('./../lib/ipfs-utils');
+const IPFS = require('./../lib/libipfs');
 const ipfs = new IPFS('/ip4/127.0.0.1/tcp/5001');
 const fs = require('fs');
 const path = require('path');
