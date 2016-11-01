@@ -9,6 +9,11 @@ const validator = require('validator');
 
 module.exports = {
     keys: (arg, options) => {
+        if (!arg) {
+            console.log('Account not specified. Use account index or hex argument');
+            return;
+        }
+
         const numberInput = validator.isInt(arg);
         const ethAccounts = ethereum.listAccounts();
 

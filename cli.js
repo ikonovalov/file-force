@@ -10,7 +10,7 @@ const validator = require('validator');
 program
     .version('0.0.1')
     .command('account <command> [arg]')
-    .description('Ethereum account operations. Commands: ls, public')
+    .description('Ethereum account operations. Commands: ls [balance], keys')
     .action((command, arg, options) => {
         switch (command) {
             case account.ls.name: {
