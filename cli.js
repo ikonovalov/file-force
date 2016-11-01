@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 'use strict';
-const ethereum = require('./lib/web3-utils');
-const account = require('./account');
-const ipfs = require('./ipfs');
+const account = require('./cmd-account');
+const ipfs = require('./cmd-ipfs');
 const colors = require('colors');
 const program = require('commander');
 const validator = require('validator');

@@ -24,6 +24,8 @@
     "keythereum": "^0.2.6",
     "node-hkdf-sync": "^1.0.0",
     "readline-sync": "^1.4.5",
-    "web3": "^0.17.0-beta"
+    "tmp": "0.0.29",
+    "web3": "^0.17.0-beta",
+    "yaml-config": "^0.3.0"
   }
 }
