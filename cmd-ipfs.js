@@ -10,15 +10,16 @@ const validator = require('validator');
 const fs = require('fs');
 const tmp = require('tmp');
 
+function addOpCallback(algorithm, iv, secret, ipfsHash) {
+    console.log(`algorithm: ${algorithm}, iv: ${iv}, secret: ${secret}, ipfs-hash: ${ipfsHash}`)
+}
+
+
 module.exports = {
 
     add: (path) => {
         let originalStream = fs.createReadStream(path);
         let onetimeKey = libcrypto.randomKey();
-
-        let publishResult = (algorithm, iv, secret, ipfsHash) => {
-            console.log(`algorithm: ${algorithm}, iv: ${iv}, secret: ${secret}, ipfs-hash: ${ipfsHash}`)
-        };
 
         tmp.file({prefix: 'force-'}, (err, tmpFilePath) => {
             if (err) throw err;
@@ -30,7 +31,7 @@ module.exports = {
                 ipfs.add(tmpFilePath, (error, result) => {
                     if (!error) {
                         let rootBlock = result[0];
-                        publishResult(
+                        addOpCallback(
                             encryptionParams.algorithm,
                             encryptionParams.iv,
                             encryptionParams.secret,
