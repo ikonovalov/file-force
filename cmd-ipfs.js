@@ -6,7 +6,6 @@ const account = require('./cmd-account');
 const libcrypto = require('./lib/libcrypto');
 const IPFS = require('./lib/libipfs');
 const ipfs = new IPFS(config.ipfs.api);
-const colors = require('colors');
 const validator = require('validator');
 const fs = require('fs');
 const tmp = require('tmp');
@@ -45,9 +44,5 @@ module.exports = {
 
             });
         });
-
-
-
-
-    },
+    }
 };

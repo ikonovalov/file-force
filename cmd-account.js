@@ -18,7 +18,7 @@ module.exports = {
         const numberInput = validator.isInt(arg);
         const ethAccounts = ethereum.listAccounts();
 
-        if (arg > ethAccounts.length) {
+        if (numberInput > ethAccounts.length) {
             console.log(`You have ${ethAccounts.length} accounts only. But your's input was ${arg}.`.red);
             return;
         }
