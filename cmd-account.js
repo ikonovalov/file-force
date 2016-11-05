@@ -4,6 +4,7 @@
 const config = require('yaml-config').readConfig('./config/app.yml');
 const ethereum = require('./lib/libweb3');
 const ethereumKeys = require('./lib/libcrypto');
+const ask = require('./lib/libask');
 const colors = require('colors');
 const validator = require('validator');
 
@@ -18,7 +19,7 @@ module.exports = {
         const numberInput = validator.isInt(arg);
         const ethAccounts = ethereum.listAccounts();
 
-        if (numberInput > ethAccounts.length) {
+        if (arg > ethAccounts.length) {
             console.log(`You have ${ethAccounts.length} accounts only. But your's input was ${arg}.`.red);
             return;
         }
@@ -27,10 +28,7 @@ module.exports = {
         if (numberInput) {
             console.log(`Account ${account}`.red.bold)
         }
-        const readlineSync = require('readline-sync');
-        let password = readlineSync.question('Unlock account. Password: ', {
-            hideEchoBack: true
-        });
+        let password = ask.password();
 
         const keys = ethereumKeys.keyPair(dataDir, account, password);
         console.log(`Private key:\t${keys.privateKey.toString('hex')}`);
