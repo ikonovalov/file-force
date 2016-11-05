@@ -28,7 +28,7 @@ module.exports = {
         if (numberInput) {
             console.log(`Account ${account}`.red.bold)
         }
-        let password = ask.password();
+        let password = ask.password({ignoreConfig: true});
 
         const keys = ethereumKeys.keyPair(dataDir, account, password);
         console.log(`Private key:\t${keys.privateKey.toString('hex')}`);

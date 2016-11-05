@@ -9,13 +9,13 @@ const ipfs = new IPFS(config.ipfs.api);
 const validator = require('validator');
 const fs = require('fs');
 const tmp = require('tmp');
+const colors = require('colors');
+const stream = require('stream');
 
 
 
 function encryptFileTag(tag, callback, publicKey) {
-    console.log(`File added to IPFS. Hash: ${tag.ipfsHash}`);
     let tagJson = validator.isJSON(tag) ? tag : JSON.stringify(tag);
-    console.log(`File tag: ${tagJson}`);
     let account = ask.account();
     let password = ask.password();
     let selfKeyPair = libcrypto.keyPair(config.eth.datadir, account, password);
@@ -29,15 +29,25 @@ function encryptFileTag(tag, callback, publicKey) {
     let selfSharedKey = libcrypto.deriveSharedKey(selfKeyPair.privateKey, chosenPublic);
     let selfStrongKeyMaterial = libcrypto.deriveSecretKey(selfSharedKey);
     let encryptedTag = libcrypto.encrypt(tagJson, selfStrongKeyMaterial.key);
-    console.log(encryptedTag);
+    let result = {
+        publicKey: chosenPublic,
+        hkdf: selfStrongKeyMaterial.hkdf,
+        encryptedTag: encryptedTag
+    };
     if (!callback) {
-        return encryptedTag;
+        return result;
     } else {
-        callback(encryptedTag);
+        callback(result);
     }
 
 }
 
+// TODO move to libipfs
+function storeEncryptedTag(encryptedTag, addCallback) {
+    var bufferStream = new stream.PassThrough();
+    bufferStream.end(encryptedTag.cipherText);
+    ipfs.add(bufferStream, addCallback);
+}
 
 module.exports = {
 
@@ -65,7 +75,24 @@ module.exports = {
                             secret: encryptionParams.secret,
                             ipfsHash: rootBlock.hash
                         };
-                        encryptFileTag(tag, (encryptedTag) => {
+                        console.log(`File added to IPFS. Tag: ${JSON.stringify(tag)}`);
+
+                        encryptFileTag(tag, (encryptionResult) => {
+                            storeEncryptedTag(encryptionResult.encryptedTag, (e, r) => {
+                                let rb = r[0];
+                                let tagHash = rb.hash;
+                                console.log(`TAG#${tagHash} -> FILE#${rootBlock.hash}`.red.bold);
+                                let ethData = {
+                                    destination: encryptionResult.publicKey,
+                                    tag: {
+                                        encrypted: true,
+                                        algorithm: encryptionResult.encryptedTag.algorithm,
+                                        iv: encryptionResult.encryptedTag.iv,
+                                        ipfsHash: tagHash
+                                    }
+                                };
+                                console.log(ethData);
+                            });
 
                         });
 
