@@ -12,6 +12,7 @@ const tmp = require('tmp');
 const colors = require('colors');
 const stream = require('stream');
 
+const ARROW = '\u2192';
 
 
 function encryptFileTag(tag, callback, publicKey) {
@@ -81,7 +82,7 @@ module.exports = {
                             storeEncryptedTag(encryptionResult.encryptedTag, (e, r) => {
                                 let rb = r[0];
                                 let tagHash = rb.hash;
-                                console.log(`TAG#${tagHash} -> FILE#${rootBlock.hash}`.red.bold);
+                                console.log(`TAG#${tagHash} ${ARROW} FILE#${rootBlock.hash}`.red.bold);
                                 let ethData = {
                                     destination: encryptionResult.publicKey,
                                     tag: {
