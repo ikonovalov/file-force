@@ -12,9 +12,10 @@ const tmp = require('tmp');
 
 
 
-function encryptFileTag(tag, publicKey) {
+function encryptFileTag(tag, callback, publicKey) {
     console.log(`File added to IPFS. Hash: ${tag.ipfsHash}`);
-    let tagJson = JSON.stringify(tag);
+    let tagJson = validator.isJSON(tag) ? tag : JSON.stringify(tag);
+    console.log(`File tag: ${tagJson}`);
     let account = ask.account();
     let password = ask.password();
     let selfKeyPair = libcrypto.keyPair(config.eth.datadir, account, password);
@@ -29,11 +30,21 @@ function encryptFileTag(tag, publicKey) {
     let selfStrongKeyMaterial = libcrypto.deriveSecretKey(selfSharedKey);
     let encryptedTag = libcrypto.encrypt(tagJson, selfStrongKeyMaterial.key);
     console.log(encryptedTag);
+    if (!callback) {
+        return encryptedTag;
+    } else {
+        callback(encryptedTag);
+    }
+
 }
 
 
 module.exports = {
 
+    /**
+     * Add single (now) file.
+     * @param path to file.
+     */
     add: (path) => {
         let originalStream = fs.createReadStream(path);
         let onetimeKey = libcrypto.randomKey();
@@ -54,7 +65,9 @@ module.exports = {
                             secret: encryptionParams.secret,
                             ipfsHash: rootBlock.hash
                         };
-                        encryptFileTag(tag);
+                        encryptFileTag(tag, (encryptedTag) => {
+
+                        });
 
                     } else {
                         console.error(error);
