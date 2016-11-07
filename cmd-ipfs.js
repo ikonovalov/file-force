@@ -10,44 +10,21 @@ const validator = require('validator');
 const fs = require('fs');
 const tmp = require('tmp');
 const colors = require('colors');
-const stream = require('stream');
 
 const ARROW = '\u2192';
 
+console.log('Prepare ETH account');
+const account = ask.account();
+const password = ask.password();
+const selfKeyPair = libcrypto.keyPair(config.eth.datadir, account, password);
 
-function encryptFileTag(tag, callback, publicKey) {
-    let tagJson = validator.isJSON(tag) ? tag : JSON.stringify(tag);
-    let account = ask.account();
-    let password = ask.password();
-    let selfKeyPair = libcrypto.keyPair(config.eth.datadir, account, password);
-    let chosenPublic;
-    if (!publicKey) {
-        chosenPublic = selfKeyPair.publicKey;
-        console.log('Using loopback file tag encryption (self public).');
-    } else {
-        chosenPublic = publicKey;
-    }
-    let selfSharedKey = libcrypto.deriveSharedKey(selfKeyPair.privateKey, chosenPublic);
-    let selfStrongKeyMaterial = libcrypto.deriveSecretKey(selfSharedKey);
-    let encryptedTag = libcrypto.encrypt(tagJson, selfStrongKeyMaterial.key);
-    let result = {
-        publicKey: chosenPublic,
-        hkdf: selfStrongKeyMaterial.hkdf,
-        encryptedTag: encryptedTag
-    };
-    if (!callback) {
-        return result;
-    } else {
-        callback(result);
-    }
-
-}
-
-// TODO move to libipfs
-function storeEncryptedTag(encryptedTag, addCallback) {
-    var bufferStream = new stream.PassThrough();
-    bufferStream.end(encryptedTag.cipherText);
-    ipfs.add(bufferStream, addCallback);
+function encryptFileTag(tag, publicKey, cb) {
+    libcrypto.encryptObjectForParty(
+        tag,
+        selfKeyPair,
+        !publicKey ? selfKeyPair.publicKey : publicKey,
+        cb
+    );
 }
 
 module.exports = {
@@ -70,32 +47,58 @@ module.exports = {
                 ipfs.add(tmpFilePath, (error, result) => {
                     if (!error) {
                         let rootBlock = result[0];
+
                         let tag = {
                             algorithm: encryptionParams.algorithm,
                             iv: encryptionParams.iv,
-                            secret: encryptionParams.secret,
-                            ipfsHash: rootBlock.hash
+                            secret: onetimeKey.toString('hex'),
+                            ipfsHash: rootBlock.hash,
+                            ipfsHashSign: libcrypto.sign(rootBlock.hash, selfKeyPair.privateKey).toString('base64')
                         };
-                        console.log(`File added to IPFS. Tag: ${JSON.stringify(tag)}`);
 
-                        encryptFileTag(tag, (encryptionResult) => {
-                            storeEncryptedTag(encryptionResult.encryptedTag, (e, r) => {
-                                let rb = r[0];
-                                let tagHash = rb.hash;
-                                console.log(`TAG#${tagHash} ${ARROW} FILE#${rootBlock.hash}`.red.bold);
-                                let ethData = {
-                                    destination: encryptionResult.publicKey,
-                                    tag: {
-                                        encrypted: true,
-                                        algorithm: encryptionResult.encryptedTag.algorithm,
-                                        iv: encryptionResult.encryptedTag.iv,
-                                        ipfsHash: tagHash
-                                    }
+                        console.log('File added to IPFS with tag:');
+                        console.log(`${JSON.stringify(tag, null, 2)}`.blue);
+
+                        console.log(`Encrypting tag with ECDH using AES...`);
+
+                        encryptFileTag(tag, null, (tagEncryptionResult) => {
+
+                                let ownerAddress = libcrypto.publicToAddress(tagEncryptionResult.ownerPubKey);
+                                let partyAddress = libcrypto.publicToAddress(tagEncryptionResult.destPubKey);
+                                let encryptedSymmetricTag = tagEncryptionResult.encryptedTag.cipherText.toString('base64');
+                                let ownerPublicKey = '0x' + tagEncryptionResult.ownerPubKey.toString('hex');
+                                let hkdf = tagEncryptionResult.hkdf;
+                                let symmetricAlgorithm = tagEncryptionResult.encryptedTag.algorithm;
+                                let symmetricIv = tagEncryptionResult.encryptedTag.iv;
+
+                                let ecTag = {
+                                    ownerAddress: ownerAddress,
+                                    partyAddress: partyAddress,
+                                    tag: encryptedSymmetricTag,
+                                    tagEncryption: {
+                                        protocol: 'ECDH',
+                                        ownerPublicKey: ownerPublicKey,
+                                        kdf: {
+                                            name: 'hkdf',
+                                            params: hkdf,
+                                        },
+                                        encryption: {
+                                            algorithm: symmetricAlgorithm,
+                                            iv: symmetricIv
+                                        }
+                                    },
                                 };
-                                console.log(ethData);
-                            });
 
-                        });
+                                let ecTagJson = JSON.stringify(ecTag);
+
+                                ipfs.addBuffer(Buffer.from(ecTagJson, 'utf8'), (e, r) => {
+                                    let rb = r[0];
+                                    let ecTagHash = rb.hash;
+                                    console.log('ecTag stored in IPFS');
+                                    console.log(`ecTag ${ecTagHash} ${ARROW} File ${rootBlock.hash}`.red.bold);
+                                });
+                            }
+                        );
 
                     } else {
                         console.error(error);
@@ -104,5 +107,9 @@ module.exports = {
 
             });
         });
+    },
+
+    get: (hash) => {
+        ipfs.get
     }
 };
