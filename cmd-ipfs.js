@@ -1,7 +1,8 @@
 /**
  * Created by ikonovalov on 01/11/16.
  */
-const config = require('yaml-config').readConfig('./config/app.yml');
+const CONFIG_PATH = './config/app.yml';
+const config = require('yaml-config').readConfig(CONFIG_PATH);
 const libcrypto = require('./lib/libcrypto');
 const ask = require('./lib/libask');
 const IPFS = require('./lib/libipfs');
@@ -26,7 +27,9 @@ module.exports = {
         const account = ask.account();
         const password = ask.password();
         const selfKeyPair = fileForce.unlockKeys(account, password);
-        fileForce.add(path, selfKeyPair, selfKeyPair.publicKey);
+        fileForce.add(path, selfKeyPair, selfKeyPair.publicKey, (ecTag, ecTagHash) => {
+            console.log(`ecTag location /ipfs/${ecTagHash}`);
+        });
     },
 
     cat: (hash) => {
