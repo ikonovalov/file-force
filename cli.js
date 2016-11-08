@@ -35,6 +35,10 @@ program.command('ipfs <command> [arg]')
                 ipfs.add(arg);
                 break;
             }
+            case ipfs.cat.name: {
+                ipfs.add(arg);
+                break;
+            }
         }
 
     });
