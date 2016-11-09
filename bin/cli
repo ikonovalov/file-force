@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 'use strict';
-const account = require('./cmd-account');
-const ipfs = require('./cmd-ipfs');
-const config = require('./cmd-config');
+const account = require('./../cmd-account');
+const ipfs = require('./../cmd-ipfs');
+const config = require('./../cmd-config');
 const colors = require('colors');
 const program = require('commander');
 const validator = require('validator');
@@ -28,7 +28,7 @@ program
     });
 
 program.command('ipfs <command> [arg]')
-    .description('IPFS files operations. Command: add')
+    .description('IPFS files operations. Command: add <path>, cat <hash>')
     .action((command, arg) => {
         switch (command) {
             case ipfs.add.name: {
@@ -36,7 +36,11 @@ program.command('ipfs <command> [arg]')
                 break;
             }
             case ipfs.cat.name: {
-                ipfs.add(arg);
+                ipfs.cat(arg);
+                break;
+            }
+            case ipfs.ecTag.name: {
+                ipfs.ecTag(arg);
                 break;
             }
         }

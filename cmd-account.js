@@ -1,7 +1,7 @@
 /**
  * Created by ikonovalov on 01/11/16.
  */
-const config = require('yaml-config').readConfig('./config/app.yml');
+const config = require('./lib/config');
 const ethereum = require('./lib/libweb3');
 const ethereumKeys = require('./lib/libcrypto');
 const ask = require('./lib/libask');

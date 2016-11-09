@@ -1,8 +1,7 @@
 /**
  * Created by ikonovalov on 01/11/16.
  */
-const CONFIG_PATH = './config/app.yml';
-const config = require('yaml-config').readConfig(CONFIG_PATH);
+const config = require('./lib/config');
 const libcrypto = require('./lib/libcrypto');
 const ask = require('./lib/libask');
 const IPFS = require('./lib/libipfs');
@@ -33,14 +32,12 @@ module.exports = {
     },
 
     cat: (hash) => {
-        ipfs.get(hash, (error, stream) => {
-            let destination = fs.createWriteStream(localPath);
-            stream.on('data', data => {
-                console.log(data.content);
-            });
-            if (cb) {
-                cb(destination);
-            }
-        })
+        fileForce.cat(hash, process.stdout);
+    },
+
+    ecTag: (ecTagHash) => {
+        fileForce.ecTagByHash(ecTagHash, ecTag => {
+           console.log(JSON.stringify(ecTag, null, 2))
+        });
     }
 };
