@@ -1,7 +1,7 @@
 /**
  * Created by ikonovalov on 02/11/16.
  */
-const config = require('yaml-config').readConfig('./config/app.yml');
+const config = require('./lib/config');
 
 module.exports = {
     show: (arg, options) => {

@@ -1,9 +1,7 @@
 /**
  * Created by ikonovalov on 01/11/16.
  */
-const CONFIG_PATH =
-    require('path').basename(__dirname) === 'bin' ?  '../config/app.yml' : './config/app.yml';
-const config = require('yaml-config').readConfig(CONFIG_PATH);
+const config = require('./lib/config');
 const libcrypto = require('./lib/libcrypto');
 const ask = require('./lib/libask');
 const IPFS = require('./lib/libipfs');
