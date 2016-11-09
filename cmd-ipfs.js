@@ -33,7 +33,13 @@ module.exports = {
         });
     },
 
-    cat: (ecTagHash) => {
-        fileForce.cat(ecTagHash, process.stdout);
+    cat: (hash) => {
+        fileForce.cat(hash, process.stdout);
+    },
+
+    ecTag: (ecTagHash) => {
+        fileForce.ecTagByHash(ecTagHash, ecTag => {
+           console.log(JSON.stringify(ecTag, null, 2))
+        });
     }
 };

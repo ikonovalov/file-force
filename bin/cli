@@ -39,6 +39,10 @@ program.command('ipfs <command> [arg]')
                 ipfs.cat(arg);
                 break;
             }
+            case ipfs.ecTag.name: {
+                ipfs.ecTag(arg);
+                break;
+            }
         }
 
     });
