@@ -15,6 +15,13 @@ const FileForce = require('./lib/libfileforce');
 
 const fileForce = new FileForce(config);
 
+function printObject(error, object) {
+    if (!error) {
+        console.log(JSON.stringify(object, null, 2))
+    } else
+        console.error(error)
+}
+
 module.exports = {
 
     /**
@@ -36,23 +43,33 @@ module.exports = {
     },
 
     ecTag: (ecTagHash) => {
-        fileForce.ecTagByHash(ecTagHash, ecTag => {
-           console.log(JSON.stringify(ecTag, null, 2));
-        });
+        fileForce.ecTagByHash(ecTagHash, printObject);
     },
 
     decryptEcTag: (ecTagHash) => {
-        fileForce.ecTagByHash(ecTagHash, ecTag => {
-            let account = ecTag.partyAddress;
-            console.log(`Party account ${account}.`);
-            let password = ask.password({ignoreConfig: true});
-            fileForce.decryptEcTag(ecTag, account, password, (error, tag) => {
-                if (!error) {
-                    console.log(JSON.stringify(tag, null, 2))
-                } else {
-                    console.error(error)
-                }
-            });
+        fileForce.ecTagByHash(ecTagHash, (error, ecTag) => {
+            if (!error) {
+                let account = ecTag.partyAddress;
+                console.log(`Party account ${account}.`);
+                let password = ask.password({ignoreConfig: true});
+                fileForce.decryptEcTag(ecTag, account, password, printObject);
+            } else
+                console.error(error)
+        });
+    },
+
+    decrypt: (ecTagHash) => {
+        fileForce.ecTagByHash(ecTagHash, (error, ecTag) => {
+            if (!error) {
+                let account = ecTag.partyAddress;
+                console.log(`Party account ${account}.`);
+                let password = ask.password({ignoreConfig: true});
+                fileForce.decryptEcTag(ecTag, account, password, (error, tag) => {
+                    fileForce.decryptByTag(tag, process.stdout);
+                });
+            } else
+                console.error(error)
         });
     }
+
 };
