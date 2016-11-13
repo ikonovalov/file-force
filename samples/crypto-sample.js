@@ -41,12 +41,14 @@ let originalMessage = 'IPFS hash here'; // should be IPFS hash
 console.log(`Alice says: '${originalMessage}'`);
 
 let messageSignature = cryptoUtils.sign(originalMessage, privateKey1);
-let encodedSignature = messageSignature.toString('base64');
+let verificationResult = cryptoUtils.verify(messageSignature, originalMessage, publicKey1);
+cryptoUtils.recovery(messageSignature, originalMessage, {pub: publicKey1});
 
-let randomSecret = cryptoUtils.randomKey(32);
+console.log("Signature verification result: " + verificationResult);
+/*let randomSecret = cryptoUtils.randomKey(32);
 let combinedMessage = {
     ipfs: originalMessage,
-    signature: encodedSignature
+    signature: messageSignature
 };
 
 let encryptedMessage = cryptoUtils.encrypt(JSON.stringify(combinedMessage), randomSecret, AES_256_CTR_BASE64);
@@ -83,4 +85,4 @@ console.log(`Bob receive: '${ipfsLink}'`);
 
 let verificationResult = cryptoUtils.verify(decryptedSignature, ipfsLink, publicKey1);
 
-console.log(`Signature verification is ${verificationResult}`);
+console.log(`Signature verification is ${verificationResult}`);*/

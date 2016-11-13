@@ -37,7 +37,18 @@ module.exports = {
 
     ecTag: (ecTagHash) => {
         fileForce.ecTagByHash(ecTagHash, ecTag => {
-           console.log(JSON.stringify(ecTag, null, 2))
+           console.log(JSON.stringify(ecTag, null, 2));
+
+            //----
+            fileForce.decryptEcTag(ecTag, '0x7116673528278887d37038d93bd749b66110ec35', 'dlheu0', (error, rs) => {
+
+            });
+
+            //----
         });
+    },
+
+    decryptEcTag: (ecTagHash) => {
+
     }
 };
