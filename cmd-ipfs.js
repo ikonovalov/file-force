@@ -48,7 +48,9 @@ module.exports = {
             let password = ask.password({ignoreConfig: true});
             fileForce.decryptEcTag(ecTag, account, password, (error, tag) => {
                 if (!error) {
-                    console.log(JSON.stringify(tag, null, 2));
+                    console.log(JSON.stringify(tag, null, 2))
+                } else {
+                    console.error(error)
                 }
             });
         });
