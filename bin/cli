@@ -43,6 +43,10 @@ program.command('ipfs <command> [arg]')
                 ipfs.ecTag(arg);
                 break;
             }
+            case ipfs.decryptEcTag.name: {
+                ipfs.decryptEcTag(arg);
+                break;
+            }
         }
 
     });
