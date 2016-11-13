@@ -70,6 +70,10 @@ module.exports = {
             } else
                 console.error(error)
         });
+    },
+
+    deligate: (ecTagHash, another) => {
+
     }
 
 };
