@@ -74,7 +74,7 @@ module.exports = {
         });
     },
 
-    deligate: (ecTagHash, anotherPublic) => {
+    delegate: (ecTagHash, anotherPublic) => {
         fileForce.ecTagByHash(ecTagHash, (error, ecTag) => {
             if (!error) {
                 let account = ecTag.partyAddress;
@@ -84,7 +84,7 @@ module.exports = {
 
                 fileForce.decryptEcTag(ecTag, selfKeyPair, (e, tag) => {
                     if (!e) {
-                        fileForce.deligateTag(tag, selfKeyPair, anotherPublic)
+                        fileForce.delegateTag(tag, selfKeyPair, anotherPublic)
                     }
                 });
             } else

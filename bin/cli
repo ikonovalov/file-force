@@ -52,7 +52,7 @@ program.command('ipfs <command> [arg] [arg2]')
                 break;
             }
             case ipfs.deligate.name: {
-                ipfs.deligate(arg, arg2);
+                ipfs.delegate(arg, arg2);
                 break;
             }
         }
