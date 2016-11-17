@@ -1,14 +1,17 @@
 default:
   ipfs:
     api: /ip4/127.0.0.1/tcp/5001
+    notify-eth: true
   eth:
     datadir: ~/.geth
+    api: http://localhost:8545
 
 development:
   eth:
     datadir: /mnt/u110/ethereum/pnet1
     account: '0x7116673528278887d37038d93bd749b66110ec35'
     password: dlheu0
+    mother-contract: unknown
 
 test:
 

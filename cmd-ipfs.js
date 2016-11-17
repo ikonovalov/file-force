@@ -51,8 +51,9 @@ module.exports = {
             if (!error) {
                 let account = ecTag.partyAddress;
                 console.log(`Party account ${account}.`);
-                let password = ask.password({ignoreConfig: true});
-                fileForce.decryptEcTag(ecTag, account, password, printObject);
+                let password = ask.password(/*{ignoreConfig: true}*/);
+                const selfKeyPair = fileForce.unlockKeys(account, password);
+                fileForce.decryptEcTag(ecTag, selfKeyPair, printObject);
             } else
                 console.error(error)
         });
@@ -63,8 +64,9 @@ module.exports = {
             if (!error) {
                 let account = ecTag.partyAddress;
                 console.log(`Party account ${account}.`);
-                let password = ask.password({ignoreConfig: true});
-                fileForce.decryptEcTag(ecTag, account, password, (error, tag) => {
+                let password = ask.password(/*{ignoreConfig: true}*/);
+                const selfKeyPair = fileForce.unlockKeys(account, password);
+                fileForce.decryptEcTag(ecTag, selfKeyPair, (error, tag) => {
                     fileForce.decryptByTag(tag, process.stdout);
                 });
             } else
@@ -72,8 +74,22 @@ module.exports = {
         });
     },
 
-    deligate: (ecTagHash, another) => {
+    deligate: (ecTagHash, anotherPublic) => {
+        fileForce.ecTagByHash(ecTagHash, (error, ecTag) => {
+            if (!error) {
+                let account = ecTag.partyAddress;
+                console.log(`Party account ${account}.`);
+                let password = ask.password(/*{ignoreConfig: true}*/);
+                let selfKeyPair = fileForce.unlockKeys(account, password);
 
+                fileForce.decryptEcTag(ecTag, selfKeyPair, (e, tag) => {
+                    if (!e) {
+                        fileForce.deligateTag(tag, selfKeyPair, anotherPublic)
+                    }
+                });
+            } else
+                console.error(error)
+        });
     }
 
 };
