@@ -31,11 +31,13 @@ module.exports = {
      * @param path to file.
      */
     add: (path) => {
-        console.log('Prepare ETH account');
         const account = ask.account();
         const password = ask.password();
+        console.log(`Unlock ETH account ${account}`);
         const selfKeyPair = fileForce.unlockKeys(account, password);
         fileForce.add(path, selfKeyPair, selfKeyPair.publicKey, (ecTag, ecTagHash) => {
+            console.log('ecTag stored in IPFS');
+            console.log(`ecTag ${ARROW} ${ecTagHash} `.red.bold);
             console.log(`ecTag location /ipfs/${ecTagHash}`);
         });
     },
