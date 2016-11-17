@@ -51,7 +51,7 @@ program.command('ipfs <command> [arg] [arg2]')
                 ipfs.decrypt(arg);
                 break;
             }
-            case ipfs.deligate.name: {
+            case ipfs.delegate.name: {
                 ipfs.delegate(arg, arg2);
                 break;
             }

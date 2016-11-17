@@ -15,6 +15,8 @@ const FileForce = require('./lib/libfileforce');
 
 const fileForce = new FileForce(config);
 
+const ARROW = '\u2192';
+
 function printObject(error, object) {
     if (!error) {
         console.log(JSON.stringify(object, null, 2))
@@ -76,20 +78,17 @@ module.exports = {
 
     delegate: (ecTagHash, anotherPublic) => {
         fileForce.ecTagByHash(ecTagHash, (error, ecTag) => {
-            if (!error) {
                 let account = ecTag.partyAddress;
                 console.log(`Party account ${account}.`);
                 let password = ask.password(/*{ignoreConfig: true}*/);
                 let selfKeyPair = fileForce.unlockKeys(account, password);
-
-                fileForce.decryptEcTag(ecTag, selfKeyPair, (e, tag) => {
-                    if (!e) {
-                        fileForce.delegateTag(tag, selfKeyPair, anotherPublic)
-                    }
+                fileForce.delegateTag(ecTagHash, selfKeyPair, anotherPublic, (newEcTag, newEcTagHash) => {
+                    console.log(`Origin ecTag ${ecTagHash} delegated to ${newEcTag.partyAddress} with new ecTag ${newEcTagHash}`.blue.bold);
+                    console.log(`Transfer  ${newEcTag.ownerAddress} ${ARROW} ${newEcTag.partyAddress} complete.`.blue.bold);
                 });
-            } else
-                console.error(error)
-        });
+            }
+        );
+
     }
 
 };
