@@ -2,7 +2,10 @@
  * Created by ikonovalov on 01/11/16.
  */
 const config = require('./lib/config');
-const ethereum = require('./lib/libweb3');
+
+const Ethereum = require('./lib/libweb3');
+const ethereum = new Ethereum(config);
+
 const ethereumKeys = require('./lib/libcrypto');
 const ask = require('./lib/libask');
 const colors = require('colors');
