@@ -1,4 +1,4 @@
-# File-force
+# File Force
 
 Decentralized file sharing with:
 * IPFS - decentralized file store (or network).
