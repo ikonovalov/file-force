@@ -2,17 +2,14 @@
  * Created by ikonovalov on 01/11/16.
  */
 const config = require('./lib/config');
-const libcrypto = require('./lib/libcrypto');
 const ask = require('./lib/libask');
-const IPFS = require('./lib/libipfs');
-const ipfs = new IPFS(config.ipfs.api);
+
 const validator = require('validator');
 const fs = require('fs');
 const tmp = require('tmp');
 const colors = require('colors');
 
 const FileForce = require('./lib/libfileforce');
-
 const fileForce = new FileForce(config);
 
 const ARROW = '\u2192';
