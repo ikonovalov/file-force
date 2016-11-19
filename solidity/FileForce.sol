@@ -6,14 +6,18 @@ contract FileForce {
 
     uint16 public constant sha256Pref = 4640;
 
-    event EcTagRegistered(uint256 ipfs, address owner, address party);
+    event EcTagRegistered(
+        uint256 ipfs,
+        address owner,
+        address party
+    );
 
     event EcTagDelegated(
         uint256 ipfsOrigin,
         uint256 ipfsNew,
         address fromAcc,
         address toAcc
-        );
+    );
 
     function FileForce() {
 
