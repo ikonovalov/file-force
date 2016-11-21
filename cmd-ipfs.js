@@ -35,7 +35,8 @@ module.exports = {
         fileForce.add(path, selfKeyPair, selfKeyPair.publicKey, (ecTag, ecTagHash) => {
             console.log('ecTag stored in IPFS');
             console.log(`ecTag ${ARROW} ${ecTagHash} `.red.bold);
-            console.log(`ecTag location /ipfs/${ecTagHash}`);
+            console.log('ecTag:');
+            console.log(`${JSON.stringify(ecTag, null, 2)}`.blue)
         });
     },
 

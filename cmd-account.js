@@ -3,7 +3,7 @@
  */
 const config = require('./lib/config');
 
-const Ethereum = require('./lib/libweb3');
+const Ethereum = require('./lib/libethereum');
 const ethereum = new Ethereum(config);
 
 const ethereumKeys = require('./lib/libcrypto');
