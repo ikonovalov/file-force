@@ -11,7 +11,7 @@ development:
     datadir: /mnt/u110/ethereum/pnet1
     account: '0x7116673528278887d37038d93bd749b66110ec35'
     password: dlheu0
-    mother-contract: 0xe478eb7f59c64a30679f20124bfdab6eeb753f5e
+    mother-contract: '0xe478eb7f59c64a30679f20124bfdab6eeb753f5e'
 
 test:
 
