@@ -32,11 +32,15 @@ module.exports = {
         const password = ask.password();
         console.log(`Unlock ETH account ${account}`);
         const selfKeyPair = fileForce.unlockKeys(account, password);
-        fileForce.add(path, selfKeyPair, selfKeyPair.publicKey, (ecTag, ecTagHash) => {
-            console.log('ecTag stored in IPFS');
-            console.log(`ecTag ${ARROW} ${ecTagHash} `.red.bold);
-            console.log('ecTag:');
-            console.log(`${JSON.stringify(ecTag, null, 2)}`.blue)
+        fileForce.add(path, selfKeyPair, selfKeyPair.publicKey, (error, result) => {
+            if (!error) {
+                console.log('ecTag stored in IPFS');
+                console.log(`ecTag ${ARROW} ${result.hash} `.red.bold);
+                console.log('ecTag:');
+                console.log(`${JSON.stringify(result.ecTag, null, 2)}`.blue)
+            } else {
+                console.error(error)
+            }
         });
     },
 
@@ -82,9 +86,13 @@ module.exports = {
                 console.log(`Party account ${account}.`);
                 let password = ask.password(/*{ignoreConfig: true}*/);
                 let selfKeyPair = fileForce.unlockKeys(account, password);
-                fileForce.delegateTag(ecTagHash, selfKeyPair, anotherPublic, (newEcTag, newEcTagHash) => {
-                    console.log(`Origin ecTag ${ecTagHash} delegated to ${newEcTag.partyAddress} with new ecTag ${newEcTagHash}`.blue.bold);
-                    console.log(`Transfer  ${newEcTag.ownerAddress} ${ARROW} ${newEcTag.partyAddress} complete.`.blue.bold);
+                fileForce.delegateTag(ecTagHash, selfKeyPair, anotherPublic, (error, result) => {
+                    if (!error) {
+                        console.log(`Origin ecTag ${result.hash} delegated to ${result.ecTag.partyAddress} with new ecTag ${result.hash}`.blue.bold);
+                        console.log(`Transfer  ${result.ecTag.ownerAddress} ${ARROW} ${result.ecTag.partyAddress} complete.`.blue.bold);
+                    } else {
+                        console.error(error)
+                    }
                 });
             }
         );
