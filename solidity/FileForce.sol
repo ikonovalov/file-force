@@ -1,10 +1,15 @@
-pragma solidity ^0.4.4;
+pragma solidity ^0.4.5;
 
 contract FileForce {
 
-    uint16 public constant version = 1;
+    uint256 public registeredFiles = 0;
+
+    uint256 public delegatedTags = 0;
+
+    uint16 public constant version = 2;
 
     uint16 public constant sha256Pref = 4640;
+
 
     event EcTagRegistered(
         uint256 ipfs,
@@ -23,12 +28,14 @@ contract FileForce {
 
     }
 
-    function ecTagRegistred(uint256 ipfs, address owner, address party) {
+    function ecTagRegistered(uint256 ipfs, address owner, address party) {
         EcTagRegistered(ipfs, owner, party);
+        registeredFiles++;
     }
 
     function ecTagDelegated(uint256 ipfsOrigin, uint256 ipfsNew, address fromAcc, address toAcc) {
         EcTagDelegated(ipfsOrigin, ipfsNew, fromAcc, toAcc);
+        delegatedTags++;
     }
 
 }

@@ -17,6 +17,7 @@
   },
   "license": "LGPL-3.0",
   "dependencies": {
+    "bignumber.js": "^3.0.0",
     "colors": "^1.1.2",
     "commander": "^2.9.0",
     "ethereumjs-util": "^4.5.0",
