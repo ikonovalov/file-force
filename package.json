@@ -13,7 +13,7 @@
     "start": "node cli.js --help"
   },
   "bin": {
-    "fforce": "./bin/cli.js"
+    "fforce": "./bin/cli"
   },
   "license": "LGPL-3.0",
   "dependencies": {
