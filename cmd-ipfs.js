@@ -12,6 +12,9 @@ const colors = require('colors');
 const FileForce = require('./lib/libfileforce');
 const fileForce = new FileForce(config);
 
+const Ethereum = require('./lib/libethereum');
+const ethereum = new Ethereum(config);
+
 const ARROW = '\u2192';
 
 function printObject(error, object) {
@@ -38,6 +41,9 @@ module.exports = {
                 console.log(`ecTag ${ARROW} ${result.hash} `.red.bold);
                 console.log('ecTag:');
                 console.log(`${JSON.stringify(result.ecTag, null, 2)}`.blue)
+
+                ethereum.registerEcTag(result.hash, result.ecTag);
+
             } else {
                 console.error(error)
             }
