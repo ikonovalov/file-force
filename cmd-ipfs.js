@@ -9,8 +9,8 @@ const fs = require('fs');
 const tmp = require('tmp');
 const colors = require('colors');
 
-const FileForce = require('./lib/libfileforce');
-const fileForce = new FileForce(config);
+const FileForceEth = require('./lib/libfileforce-eth');
+const fileForce = new FileForceEth(config);
 
 const Ethereum = require('./lib/libethereum');
 const ethereum = new Ethereum(config);
