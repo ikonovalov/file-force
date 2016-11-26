@@ -28,7 +28,10 @@ program
     });
 
 program.command('ipfs <command> [arg] [arg2]')
-    .description('IPFS files operations. Command: add <path>, cat <hash>')
+    .description(
+        'IPFS files operations. Commands: ' +
+        'add <path>, cat <hash>, ecTag <hash>, decryptEcTag <hash>, decrypt <hash>, delegate <hash> <pubkey>'
+    )
     .action((command, arg, arg2) => {
         switch (command) {
             case ipfs.add.name: {
@@ -54,6 +57,9 @@ program.command('ipfs <command> [arg] [arg2]')
             case ipfs.delegate.name: {
                 ipfs.delegate(arg, arg2);
                 break;
+            }
+            case ipfs.watch.name: {
+                ipfs.watch(arg ? JSON.parse(arg) : null);
             }
         }
 

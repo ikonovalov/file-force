@@ -9,8 +9,9 @@ const fs = require('fs');
 const tmp = require('tmp');
 const colors = require('colors');
 
+const FileForce = require('./lib/libfileforce');
 const FileForceEth = require('./lib/libfileforce-eth');
-const fileForce = new FileForceEth(config);
+const fileForce = config.ipfs['enable-eth'] ? new FileForceEth(config) : new FileForce(config);
 
 const ARROW = '\u2192';
 
@@ -97,7 +98,12 @@ module.exports = {
                 });
             }
         );
+    },
 
+    watch: (filter = {}) => {
+        fileForce.watch(filter, (error, event) => {
+
+        })
     }
 
 };
