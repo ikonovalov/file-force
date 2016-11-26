@@ -33,16 +33,24 @@ module.exports = {
         const password = ask.password();
         console.log(`Unlock ETH account ${account}`);
         const selfKeyPair = fileForce.unlockKeys(account, password);
+
         fileForce.add(path, selfKeyPair, selfKeyPair.publicKey, (error, result) => {
             if (!error) {
                 console.log('ecTag stored in IPFS');
                 console.log(`ecTag ${ARROW} ${result.hash} `.red.bold);
                 console.log('ecTag:');
                 console.log(`${JSON.stringify(result.ecTag, null, 2)}`.blue)
-
             } else {
                 console.error(error)
             }
+        });
+
+
+        // ecTag handled via final callback, but file's tag and hash handled vie event
+        fileForce.once('IPFS#ADD#FILE', (hash, tag) => {
+            console.log(`File ${ARROW} ${hash} `.red.bold);
+            console.log('Tag:'.blue);
+            console.log(`${JSON.stringify(tag, null, 2)}`.blue);
         });
     },
 
