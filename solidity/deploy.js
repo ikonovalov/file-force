@@ -3,87 +3,15 @@ const web3 = new Web3();
 const providerUrl = 'http://localhost:8545';
 web3.setProvider(new web3.providers.HttpProvider(providerUrl));
 
-
-
-const fileforceContract = web3.eth.contract([{
-    "constant": true,
-    "inputs": [],
-    "name": "registeredFiles",
-    "outputs": [{"name": "", "type": "uint256"}],
-    "payable": false,
-    "type": "function"
-}, {
-    "constant": true,
-    "inputs": [],
-    "name": "delegatedTags",
-    "outputs": [{"name": "", "type": "uint256"}],
-    "payable": false,
-    "type": "function"
-}, {
-    "constant": true,
-    "inputs": [],
-    "name": "version",
-    "outputs": [{"name": "", "type": "uint16"}],
-    "payable": false,
-    "type": "function"
-}, {
-    "constant": true,
-    "inputs": [],
-    "name": "sha256Pref",
-    "outputs": [{"name": "", "type": "uint16"}],
-    "payable": false,
-    "type": "function"
-}, {
-    "constant": false,
-    "inputs": [{"name": "ipfs", "type": "uint256"}, {"name": "owner", "type": "address"}, {
-        "name": "party",
-        "type": "address"
-    }],
-    "name": "ecTagRegistered",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
-}, {
-    "constant": false,
-    "inputs": [{"name": "ipfsOrigin", "type": "uint256"}, {"name": "ipfsNew", "type": "uint256"}, {
-        "name": "fromAcc",
-        "type": "address"
-    }, {"name": "toAcc", "type": "address"}],
-    "name": "ecTagDelegated",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
-}, {"inputs": [], "payable": false, "type": "constructor"}, {
-    "anonymous": false,
-    "inputs": [{"indexed": false, "name": "ipfs", "type": "uint256"}, {
-        "indexed": false,
-        "name": "owner",
-        "type": "address"
-    }, {"indexed": false, "name": "party", "type": "address"}],
-    "name": "EcTagRegistered",
-    "type": "event"
-}, {
-    "anonymous": false,
-    "inputs": [{"indexed": false, "name": "ipfsOrigin", "type": "uint256"}, {
-        "indexed": false,
-        "name": "ipfsNew",
-        "type": "uint256"
-    }, {"indexed": false, "name": "fromAcc", "type": "address"}, {
-        "indexed": false,
-        "name": "toAcc",
-        "type": "address"
-    }],
-    "name": "EcTagDelegated",
-    "type": "event"
-}]);
-let fileforce = fileforceContract.new(
+var fileforceContract = web3.eth.contract([{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"admins","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"totalDelegatedEcTags","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"version","outputs":[{"name":"","type":"uint16"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"sha256Pref","outputs":[{"name":"","type":"uint16"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"disableHashBroadcasting","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"newAdmin","type":"address"}],"name":"addAdmin","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"enableHashBroadcasting","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"totalFileAppeared","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"ipfs","type":"uint256"},{"name":"owner","type":"address"},{"name":"party","type":"address"}],"name":"ecTagRegistered","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"totalEcTags","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"ipfsHash","type":"uint256"}],"name":"newFileAppeared","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"ipfsOrigin","type":"uint256"},{"name":"ipfsNew","type":"uint256"},{"name":"fromAcc","type":"address"},{"name":"toAcc","type":"address"}],"name":"ecTagDelegated","outputs":[],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"ipfs","type":"uint256"},{"indexed":false,"name":"owner","type":"address"},{"indexed":false,"name":"party","type":"address"}],"name":"EcTagRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"ipfsOrigin","type":"uint256"},{"indexed":false,"name":"ipfsNew","type":"uint256"},{"indexed":false,"name":"fromAcc","type":"address"},{"indexed":false,"name":"toAcc","type":"address"}],"name":"EcTagDelegated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"ipfsHash","type":"uint256"}],"name":"NewFileAppeared","type":"event"}]);
+var fileforce = fileforceContract.new(
     {
         from: web3.eth.accounts[0],
-        data: '0x60606040526000600055600060015534610000575b5b5b6102a5806100246000396000f36060604052361561006f576000357c010000000000000000000000000000000000000000000000000000000090048062eac7311461007457806314bbc08b1461009757806354fd4d50146100ba5780636dd203fe146100e1578063b9e25c8514610108578063ddb98d5814610137575b610000565b346100005761008161016f565b6040518082815260200191505060405180910390f35b34610000576100a4610175565b6040518082815260200191505060405180910390f35b34610000576100c761017b565b604051808261ffff16815260200191505060405180910390f35b34610000576100ee610180565b604051808261ffff16815260200191505060405180910390f35b34610000576101356004808035906020019091908035906020019091908035906020019091905050610186565b005b346100005761016d6004808035906020019091908035906020019091908035906020019091908035906020019091905050610211565b005b60005481565b60015481565b600181565b61122081565b7f412e39855305b90f29d9cc18c9c1b2c2dc641639d86e2500c6855ec49b378023838383604051808481526020018373ffffffffffffffffffffffffffffffffffffffff1681526020018273ffffffffffffffffffffffffffffffffffffffff168152602001935050505060405180910390a16000600081548092919060010191905055505b505050565b7fde1d784aaf5d88998af3f16de0a528e391f2d497495cade8d346cf32ea5f063b84848484604051808581526020018481526020018373ffffffffffffffffffffffffffffffffffffffff1681526020018273ffffffffffffffffffffffffffffffffffffffff16815260200194505050505060405180910390a16001600081548092919060010191905055505b5050505056',
+        data: '0x60606040526000600155600060025560006003556001600460006101000a81548160ff02191690837f010000000000000000000000000000000000000000000000000000000000000090810204021790555034610000575b5b6001600060003373ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff02191690837f01000000000000000000000000000000000000000000000000000000000000009081020402179055505b5b5b6105d9806100ce6000396000f3606060405236156100b2576000357c010000000000000000000000000000000000000000000000000000000090048063429b62e5146100b757806350ff7a29146100ea57806354fd4d501461010d5780636dd203fe146101345780636ebca0b31461015b578063704802751461016a57806371fdd599146101875780637b5de47214610196578063b9e25c85146101b9578063ccb6613f146101e8578063d204e4201461020b578063ddb98d5814610228575b610000565b34610000576100d26004808035906020019091905050610260565b60405180821515815260200191505060405180910390f35b34610000576100f7610280565b6040518082815260200191505060405180910390f35b346100005761011a610286565b604051808261ffff16815260200191505060405180910390f35b346100005761014161028b565b604051808261ffff16815260200191505060405180910390f35b3461000057610168610291565b005b34610000576101856004808035906020019091905050610315565b005b34610000576101946103c1565b005b34610000576101a3610445565b6040518082815260200191505060405180910390f35b34610000576101e6600480803590602001909190803590602001909190803590602001909190505061044b565b005b34610000576101f56104d6565b6040518082815260200191505060405180910390f35b346100005761022660048080359060200190919050506104dc565b005b346100005761025e6004808035906020019091908035906020019091908035906020019091908035906020019091905050610545565b005b60006020528060005260406000206000915054906101000a900460ff1681565b60025481565b600381565b61122081565b600060003373ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff1615156102d357610000565b6000600460006101000a81548160ff02191690837f01000000000000000000000000000000000000000000000000000000000000009081020402179055505b5b565b600060003373ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16151561035757610000565b6001600060008373ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff02191690837f01000000000000000000000000000000000000000000000000000000000000009081020402179055505b5b50565b600060003373ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16151561040357610000565b6001600460006101000a81548160ff02191690837f01000000000000000000000000000000000000000000000000000000000000009081020402179055505b5b565b60035481565b7f412e39855305b90f29d9cc18c9c1b2c2dc641639d86e2500c6855ec49b378023838383604051808481526020018373ffffffffffffffffffffffffffffffffffffffff1681526020018273ffffffffffffffffffffffffffffffffffffffff168152602001935050505060405180910390a16001600081548092919060010191905055505b505050565b60015481565b600460009054906101000a900460ff1615156104f757610542565b7f3abe54fb126727cd837c896003b411fd039046e3b422df9c4129b72d07c8f06d816040518082815260200191505060405180910390a16003600081548092919060010191905055505b5b50565b7fde1d784aaf5d88998af3f16de0a528e391f2d497495cade8d346cf32ea5f063b84848484604051808581526020018481526020018373ffffffffffffffffffffffffffffffffffffffff1681526020018273ffffffffffffffffffffffffffffffffffffffff16815260200194505050505060405180910390a16002600081548092919060010191905055505b5050505056',
         gas: '4700000'
-    }, function (e, contract) {
+    }, function (e, contract){
         console.log(e, contract);
         if (typeof contract.address !== 'undefined') {
             console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
         }
-    });
+    })

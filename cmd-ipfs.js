@@ -9,8 +9,9 @@ const fs = require('fs');
 const tmp = require('tmp');
 const colors = require('colors');
 
+const FileForce = require('./lib/libfileforce');
 const FileForceEth = require('./lib/libfileforce-eth');
-const fileForce = new FileForceEth(config);
+const fileForce = config.ipfs['enable-eth'] ? new FileForceEth(config) : new FileForce(config);
 
 const ARROW = '\u2192';
 
@@ -32,16 +33,21 @@ module.exports = {
         const password = ask.password();
         console.log(`Unlock ETH account ${account}`);
         const selfKeyPair = fileForce.unlockKeys(account, password);
+
         fileForce.add(path, selfKeyPair, selfKeyPair.publicKey, (error, result) => {
             if (!error) {
                 console.log('ecTag stored in IPFS');
                 console.log(`ecTag ${ARROW} ${result.hash} `.red.bold);
                 console.log('ecTag:');
                 console.log(`${JSON.stringify(result.ecTag, null, 2)}`.blue)
-
             } else {
                 console.error(error)
             }
+        });
+
+        // ecTag handled via final callback, but file's tag and hash handled vie event
+        fileForce.once('IPFS#ADD#FILE', (hash) => {
+            console.log(`File ${ARROW} ${hash} `.red.bold);
         });
     },
 
@@ -97,7 +103,39 @@ module.exports = {
                 });
             }
         );
+    },
 
+    fwatch: (eventFilter = {}) => {
+        fileForce.watchEvents('NewFileAppeared',
+            {
+
+            },
+            {
+                fromBlock: 3000,
+                toBlock: 'latest'
+            },
+            (error, event) => {
+                if (!error) {
+                    console.log(JSON.stringify(event, null, 2));
+                }
+            }
+        )
+    },
+
+    ecwatch: (eventFilter = {}) => {
+        fileForce.watchEvents('EcTagRegistered',
+            {
+
+            },
+            {
+                fromBlock: 3000,
+                toBlock: 'latest'
+            },
+            (error, event) => {
+            if (!error) {
+                console.log(JSON.stringify(event, null, 2));
+            }
+        }
+        )
     }
-
 };

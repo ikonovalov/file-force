@@ -1,14 +1,45 @@
 pragma solidity ^0.4.5;
 
-contract FileForce {
+contract Administrative {
 
-    uint256 public registeredFiles = 0;
+    mapping(address => bool) public admins;
 
-    uint256 public delegatedTags = 0;
+    function Administrative() {
+        admins[msg.sender] = true;
+    }
 
-    uint16 public constant version = 2;
+    modifier adminsOnly {
+        if (!admins[msg.sender]) {
+            throw;
+        }
+        _;
+    }
+
+    function addAdmin(address newAdmin) adminsOnly {
+        admins[newAdmin] = true;
+    }
+
+}
+
+contract FileForce is Administrative {
+
+    uint256 public totalEcTags = 0;
+
+    uint256 public totalDelegatedEcTags = 0;
+
+    uint256 public totalFileAppeared = 0;
+
+    uint16 public constant version = 3;
 
     uint16 public constant sha256Pref = 4640;
+
+    bool internal hashBroadcasting = true;
+
+    modifier hashBroadcastingEnabled {
+        if (!hashBroadcasting)
+            return;
+        _;
+    }
 
 
     event EcTagRegistered(
@@ -24,18 +55,35 @@ contract FileForce {
         address toAcc
     );
 
+    event NewFileAppeared(
+        uint256 ipfsHash
+    );
+
     function FileForce() {
 
     }
 
+    function enableHashBroadcasting() adminsOnly {
+        hashBroadcasting = true;
+    }
+
+    function disableHashBroadcasting() adminsOnly {
+        hashBroadcasting = false;
+    }
+
     function ecTagRegistered(uint256 ipfs, address owner, address party) {
         EcTagRegistered(ipfs, owner, party);
-        registeredFiles++;
+        totalEcTags++;
     }
 
     function ecTagDelegated(uint256 ipfsOrigin, uint256 ipfsNew, address fromAcc, address toAcc) {
         EcTagDelegated(ipfsOrigin, ipfsNew, fromAcc, toAcc);
-        delegatedTags++;
+        totalDelegatedEcTags++;
+    }
+
+    function newFileAppeared(uint256 ipfsHash) hashBroadcastingEnabled {
+        NewFileAppeared(ipfsHash);
+        totalFileAppeared++;
     }
 
 }
