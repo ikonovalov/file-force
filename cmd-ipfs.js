@@ -106,9 +106,15 @@ module.exports = {
     },
 
     watch: (eventFilter = {}) => {
-        fileForce.watch({event: 'TBD', cb: (error, event) => {
-
-        }});
+        fileForce.watch('NewFileAppeared', {},
+            {
+                fromBlock: 3000,
+                toBlock: 'latest'
+            },
+            (error, event) => {
+                if (!error) {
+                    console.log(JSON.stringify(event, null, 2));
+                }
+            });
     }
-
 };
