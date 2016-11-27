@@ -45,12 +45,9 @@ module.exports = {
             }
         });
 
-
         // ecTag handled via final callback, but file's tag and hash handled vie event
-        fileForce.once('IPFS#ADD#FILE', (hash, tag) => {
+        fileForce.once('IPFS#ADD#FILE', (hash) => {
             console.log(`File ${ARROW} ${hash} `.red.bold);
-            console.log('Tag:'.blue);
-            console.log(`${JSON.stringify(tag, null, 2)}`.blue);
         });
     },
 
@@ -108,10 +105,10 @@ module.exports = {
         );
     },
 
-    watch: (filter = {}) => {
-        fileForce.watch(filter, (error, event) => {
+    watch: (eventFilter = {}) => {
+        fileForce.watch({event: 'TBD', cb: (error, event) => {
 
-        })
+        }});
     }
 
 };
