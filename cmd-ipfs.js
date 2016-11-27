@@ -105,8 +105,11 @@ module.exports = {
         );
     },
 
-    watch: (eventFilter = {}) => {
-        fileForce.watch('NewFileAppeared', {},
+    fwatch: (eventFilter = {}) => {
+        fileForce.watchEvents('NewFileAppeared',
+            {
+
+            },
             {
                 fromBlock: 3000,
                 toBlock: 'latest'
@@ -115,6 +118,24 @@ module.exports = {
                 if (!error) {
                     console.log(JSON.stringify(event, null, 2));
                 }
-            });
+            }
+        )
+    },
+
+    ecwatch: (eventFilter = {}) => {
+        fileForce.watchEvents('EcTagRegistered',
+            {
+
+            },
+            {
+                fromBlock: 3000,
+                toBlock: 'latest'
+            },
+            (error, event) => {
+            if (!error) {
+                console.log(JSON.stringify(event, null, 2));
+            }
+        }
+        )
     }
 };
