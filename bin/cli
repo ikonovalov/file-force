@@ -30,7 +30,9 @@ program
 program.command('ipfs <command> [arg] [arg2]')
     .description(
         'IPFS files operations. Commands: ' +
-        'add <path>, cat <hash>, ecTag <hash>, decryptEcTag <hash>, decrypt <hash>, delegate <hash> <pubkey>'
+        'add <path>, cat <hash>, ' +
+        'ecTag <hash>, decryptEcTag <hash>, decrypt <hash>, delegate <hash> <pubkey> ' +
+        'fwatch <filter>, ecwatch <filter>, ecdwatch <filter>'
     )
     .action((command, arg, arg2) => {
 
