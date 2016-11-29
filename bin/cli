@@ -33,6 +33,11 @@ program.command('ipfs <command> [arg] [arg2]')
         'add <path>, cat <hash>, ecTag <hash>, decryptEcTag <hash>, decrypt <hash>, delegate <hash> <pubkey>'
     )
     .action((command, arg, arg2) => {
+
+        var nonEmptyObject = function (_arg) {
+            return arg ? JSON.parse(_arg) : {};
+        };
+
         switch (command) {
             case ipfs.add.name: {
                 ipfs.add(arg);
@@ -59,11 +64,15 @@ program.command('ipfs <command> [arg] [arg2]')
                 break;
             }
             case ipfs.fwatch.name: {
-                ipfs.fwatch(arg ? JSON.parse(arg) : {});
+                ipfs.fwatch(nonEmptyObject(arg));
                 break;
             }
             case ipfs.ecwatch.name: {
-                ipfs.ecwatch(arg ? JSON.parse(arg) : {});
+                ipfs.ecwatch(nonEmptyObject(arg));
+                break;
+            }
+            case ipfs.ecdwatch.name: {
+                ipfs.ecdwatch(nonEmptyObject(arg));
                 break;
             }
         }

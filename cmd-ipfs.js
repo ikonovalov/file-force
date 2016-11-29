@@ -11,6 +11,7 @@ const colors = require('colors');
 
 const FileForce = require('./lib/libfileforce');
 const FileForceEth = require('./lib/libfileforce-eth');
+const eventType = require('./lib/libfileforce-eth').eventType;
 const fileForce = config.ipfs['enable-eth'] ? new FileForceEth(config) : new FileForce(config);
 
 const ARROW = '\u2192';
@@ -21,6 +22,11 @@ function printObject(error, object) {
     } else
         console.error(error)
 }
+
+function calculateStartBlockOffset(eventFilter) {
+    return eventFilter.fromBlock ? eventFilter.fromBlock : fileForce.ethereum.lastBlock.number - 100;
+}
+
 
 module.exports = {
 
@@ -106,12 +112,14 @@ module.exports = {
     },
 
     fwatch: (eventFilter = {}) => {
-        fileForce.watchEvents('NewFileAppeared',
+        let startBlock = calculateStartBlockOffset(eventFilter);
+        console.log(`Watching block range ${startBlock} ${ARROW} latest`.blue);
+        fileForce.watchEvents(eventType.NewFileAppeared,
             {
 
             },
             {
-                fromBlock: 3000,
+                fromBlock: startBlock,
                 toBlock: 'latest'
             },
             (error, event) => {
@@ -119,16 +127,20 @@ module.exports = {
                     console.log(JSON.stringify(event, null, 2));
                 }
             }
-        )
+        );
+        return
     },
 
     ecwatch: (eventFilter = {}) => {
-        fileForce.watchEvents('EcTagRegistered',
+        let startBlock = calculateStartBlockOffset(eventFilter);
+        console.log(`Watching block range ${startBlock} ${ARROW} latest`.blue);
+
+        fileForce.watchEvents(eventType.EcTagRegistered,
             {
 
             },
             {
-                fromBlock: 3000,
+                fromBlock: startBlock,
                 toBlock: 'latest'
             },
             (error, event) => {
@@ -136,6 +148,26 @@ module.exports = {
                 console.log(JSON.stringify(event, null, 2));
             }
         }
+        )
+    },
+
+    ecdwatch: (eventFilter = {}) => {
+        let startBlock = calculateStartBlockOffset(eventFilter);
+        console.log(`Watching block range ${startBlock} ${ARROW} latest`.blue);
+
+        fileForce.watchEvents(eventType.EcTagDelegated,
+            {
+
+            },
+            {
+                fromBlock: startBlock,
+                toBlock: 'latest'
+            },
+            (error, event) => {
+                if (!error) {
+                    console.log(JSON.stringify(event, null, 2));
+                }
+            }
         )
     }
 };
