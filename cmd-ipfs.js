@@ -176,6 +176,10 @@ module.exports = {
         )
     },
 
+    pull: (hash) => {
+        redundant.pull(hash, () => console.log('Pulled'));
+    },
+
     /** EXPERIMENTAL !!! **/
     providers: (hash) => {
         redundant.providers(hash, (e, v) => {
