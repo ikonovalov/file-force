@@ -11,10 +11,16 @@ const colors = require('colors');
 
 const FileForce = require('./lib/libfileforce');
 const FileForceEth = require('./lib/libfileforce-eth');
+
+const Redundant = require('./lib/libredundant');
+const redundant = new Redundant(config);
+
 const eventType = require('./lib/libfileforce-eth').eventType;
 const fileForce = config.ipfs['enable-eth'] ? new FileForceEth(config) : new FileForce(config);
 
 const ARROW = '\u2192';
+
+const EVENT_OFFSET = config.eth['event-offset'];
 
 function printObject(error, object) {
     if (!error) {
@@ -24,9 +30,8 @@ function printObject(error, object) {
 }
 
 function calculateStartBlockOffset(eventFilter) {
-    return eventFilter.fromBlock ? eventFilter.fromBlock : fileForce.ethereum.lastBlock.number - 100;
+    return eventFilter.fromBlock ? eventFilter.fromBlock : fileForce.ethereum.lastBlock.number - EVENT_OFFSET;
 }
-
 
 module.exports = {
 
@@ -124,7 +129,7 @@ module.exports = {
             },
             (error, event) => {
                 if (!error) {
-                    console.log(JSON.stringify(event, null, 2));
+                    console.log(FileForceEth.eventToIPFSHash(event.args.ipfs));
                 }
             }
         );
@@ -145,7 +150,7 @@ module.exports = {
             },
             (error, event) => {
             if (!error) {
-                console.log(JSON.stringify(event, null, 2));
+                console.log(FileForceEth.eventToIPFSHash(event.args.ipfs));
             }
         }
         )
@@ -169,5 +174,11 @@ module.exports = {
                 }
             }
         )
+    },
+
+    providers: (hash) => {
+        redundant.providers(hash, (e, v) => {
+            console.log(v);
+        })
     }
 };

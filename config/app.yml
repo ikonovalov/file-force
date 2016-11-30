@@ -5,13 +5,14 @@ default:
   eth:
     datadir: ~/.geth
     api: http://localhost:8545
+    event-offset: 100
 
 development:
   eth:
     datadir: /mnt/u110/ethereum/pnet1
     account: '0x7116673528278887d37038d93bd749b66110ec35'
     password: dlheu0
-    mother-contract: '0xb977b7d432888994e0a0eaa906df581ecf3bf1fd'
+    mother-contract: '0x8bdfcef3d5ec77a77985d07925b05e5f9302b9a8'
 
 test:
 

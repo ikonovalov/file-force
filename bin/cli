@@ -77,6 +77,10 @@ program.command('ipfs <command> [arg] [arg2]')
                 ipfs.ecdwatch(nonEmptyObject(arg));
                 break;
             }
+            case ipfs.providers.name: {
+                ipfs.providers(arg);
+                break;
+            }
         }
 
     });

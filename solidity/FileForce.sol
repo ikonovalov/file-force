@@ -56,7 +56,7 @@ contract FileForce is Administrative {
     );
 
     event NewFileAppeared(
-        uint256 ipfsHash
+        uint256 ipfs
     );
 
     function FileForce() {
