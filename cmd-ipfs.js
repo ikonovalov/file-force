@@ -129,7 +129,7 @@ module.exports = {
             },
             (error, event) => {
                 if (!error) {
-                    console.log(FileForceEth.eventToIPFSHash(event.args.ipfs));
+                    console.log(FileForceEth.bnToMultihash58(event.args.ipfs));
                 }
             }
         );
@@ -150,7 +150,7 @@ module.exports = {
             },
             (error, event) => {
             if (!error) {
-                console.log(FileForceEth.eventToIPFSHash(event.args.ipfs));
+                console.log(FileForceEth.bnToMultihash58(event.args.ipfs));
             }
         }
         )
@@ -170,7 +170,10 @@ module.exports = {
             },
             (error, event) => {
                 if (!error) {
-                    console.log(JSON.stringify(event, null, 2));
+                    let args = event.args;
+                    let ipfsOrigin = FileForceEth.bnToMultihash58(args.ipfsOrigin);
+                    let ipfsNew = FileForceEth.bnToMultihash58(args.ipfsNew);
+                    console.log(`${ipfsOrigin} ${ARROW} ${ipfsNew}`);
                 }
             }
         )
