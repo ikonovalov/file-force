@@ -176,9 +176,13 @@ module.exports = {
         )
     },
 
+    /** EXPERIMENTAL !!! **/
     providers: (hash) => {
         redundant.providers(hash, (e, v) => {
-            console.log(v);
+            if (e) {
+                let withResponses = v.filter(e => e.Responses);
+                console.log(withResponses);
+            }
         })
     }
 };
