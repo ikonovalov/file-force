@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+console.log('File Force Harvester (FFH)');
+const colors = require('colors');
+const ARROW = '\u2192';
+const INFINITY = '\u221E';
+
+
+const config = require('../lib/config');
+const FileForceEth = require('../lib/libfileforce-eth');
+
+const Redundant = require('../lib/libredundant');
+const redundant = new Redundant(config);
+
+const fileForce = new FileForceEth(config);
+
+const lastBlock = fileForce.ethereum.lastBlock.number;
+const eventFilter = {};
+const blockFilter = {fromBlock: lastBlock - 10, toBlock: 'latest'};
+
+console.log(`Block range: ${blockFilter.fromBlock} ${ARROW} ${INFINITY}`.blue);
+
+var startHarvesting = (eventType) => {
+    fileForce.watchEvents(
+        eventType,
+        eventFilter,
+        blockFilter,
+        (error, event) => {
+            if (!error) {
+                let ipfsHash = FileForceEth.bnToMultihash58(event.args.ipfs);
+                redundant.pull(ipfsHash, (error, done) => {
+                    console.log(`${ipfsHash} on ${event.blockNumber} block ${error ? error : done}`)
+                })
+            }
+        });
+};
+
+startHarvesting(FileForceEth.eventType.NewFileAppeared);
