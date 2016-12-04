@@ -15,7 +15,7 @@ const fileForce = new FileForceEth(config);
 
 const lastBlock = fileForce.ethereum.lastBlock.number;
 const eventFilter = {};
-const blockFilter = {fromBlock: lastBlock - 10, toBlock: 'latest'};
+const blockFilter = {fromBlock: lastBlock - 50, toBlock: 'latest'};
 
 console.log(`Block range: ${blockFilter.fromBlock} ${ARROW} ${INFINITY}`.blue);
 
