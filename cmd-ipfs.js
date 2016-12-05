@@ -57,8 +57,8 @@ module.exports = {
         });
 
         // ecTag handled via final callback, but file's tag and hash handled vie event
-        fileForce.once('IPFS#ADD#FILE', (hash) => {
-            console.log(`File ${ARROW} ${hash} `.red.bold);
+        fileForce.once('IPFS#ADD#FILE', (hash, account) => {
+            console.log(`File ${ARROW} ${hash}`.red.bold);
         });
     },
 
