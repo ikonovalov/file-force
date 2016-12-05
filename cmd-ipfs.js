@@ -102,7 +102,7 @@ module.exports = {
         fileForce.ecTagByHash(ecTagHash, (error, ecTag) => {
                 let account = ecTag.partyAddress;
                 console.log(`Party account ${account}.`);
-                let password = ask.password({ignoreConfig: true});
+                let password = ask.password(/*{ignoreConfig: true}*/);
                 let selfKeyPair = fileForce.unlockKeys(account, password);
                 fileForce.delegateTag(ecTagHash, selfKeyPair, anotherPublic, (error, result) => {
                     if (!error) {
