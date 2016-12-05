@@ -1,23 +1,85 @@
 #!/usr/bin/env node
-console.log('File Force Harvester (FFH)');
+const p = require('path');
+const commandLineArgs = require('command-line-args')
 const colors = require('colors');
 const ARROW = '\u2192';
 const INFINITY = '\u221E';
 
+// command line
+const defaultConfigLocation = p.join(p.dirname(__filename), '../config/app.yml');
 
-const config = require('../lib/config');
+const optionDefinitions = [
+    { name: 'mode',   type: String, defaultValue: 'ectag', defaultOption: true, alias: 'm' },
+    { name: 'offset', type: Number, defaultValue: 50, alias: 's'},
+    { name: 'scan-to', type: Number, defaultValue: Infinity, alias: 'e'},
+    { name: 'config', type: String, defaultValue: defaultConfigLocation, alias: 'c'},
+    { name: 'fail-fast', type: Boolean, defaultValue: false }
+];
+
+const options = commandLineArgs(optionDefinitions);
+
+// fileforce, ethereum and redundant
+
 const FileForceEth = require('../lib/libfileforce-eth');
 
 const Redundant = require('../lib/libredundant');
+
+// event map and  handlers
+
+function pull(hashBn, event) {
+    let ipfsHash = FileForceEth.bnToMultihash58(hashBn);
+    redundant.pull(ipfsHash, (error, done) => {
+        console.log(`${ipfsHash} on ${event.blockNumber} block ${error ? error : done}`);
+
+        // let it down if fail-fast option is enabled
+        if (error && options['fail-fast']) {
+            throw error
+        }
+    })
+}
+
+const modeToEvent = {
+    file: {
+        event: FileForceEth.eventType.NewFileAppeared,
+        handler: (event) => {
+            pull(event.args.ipfs, event);
+        }
+    },
+    ectag:  {
+        event: FileForceEth.eventType.EcTagRegistered,
+        handler: (event) => {
+            pull(event.args.ipfs, event);
+        }
+    },
+    ecdtag: {
+        event: FileForceEth.eventType.EcTagDelegated,
+        handler: (event) => {
+            pull(event.args.ipfsOrigin, event);
+            pull(event.args.ipfsNew, event);
+        }
+    }
+};
+
+console.log(`File Force Harvester (FFH). Mode: ${options.mode}`);
+
+const config = require('yaml-config').readConfig(options.config);
+
 const redundant = new Redundant(config);
 
 const fileForce = new FileForceEth(config);
 
 const lastBlock = fileForce.ethereum.lastBlock.number;
+
 const eventFilter = {};
-const blockFilter = {fromBlock: lastBlock - 50, toBlock: 'latest'};
+
+const blockFilter = {
+    fromBlock: lastBlock - options.offset,
+    toBlock: options['scan-to'] == Infinity ? 'latest' : options['scan-to']
+};
 
 console.log(`Block range: ${blockFilter.fromBlock} ${ARROW} ${INFINITY}`.blue);
+
+const mode = modeToEvent[options.mode];
 
 var startHarvesting = (eventType) => {
     fileForce.watchEvents(
@@ -26,12 +88,9 @@ var startHarvesting = (eventType) => {
         blockFilter,
         (error, event) => {
             if (!error) {
-                let ipfsHash = FileForceEth.bnToMultihash58(event.args.ipfs);
-                redundant.pull(ipfsHash, (error, done) => {
-                    console.log(`${ipfsHash} on ${event.blockNumber} block ${error ? error : done}`)
-                })
+                mode.handler(event)
             }
         });
 };
 
-startHarvesting(FileForceEth.eventType.NewFileAppeared);
+startHarvesting(mode.event);
