@@ -11,9 +11,11 @@ program
     .version('0.0.1')
     .usage('<command>');
 
+// ACCOUNT CMD
 program
     .command('account <subCommand> [arg]')
-    .description('Ethereum account operations. Sub commands: ls [balance], keys <index or address>, config')
+    .usage('<subCommand> [arg]')
+    .description('Ethereum account operations. Sub commands: ls [balance], keys <index or address>')
     .action((subCommand, arg, options) => {
         switch (subCommand) {
             case account.ls.name: {
@@ -25,11 +27,12 @@ program
                 break;
             }
             default: {
-                console.log(`Command 'accounts ${subCommand}' not found.`);
+                console.log(`Command 'account ${subCommand}' not found.`);
             }
         }
     });
 
+// IPFS CMD
 program
     .command('ipfs <command> [arg] [arg2]')
     .description(
