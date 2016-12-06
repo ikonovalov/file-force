@@ -1,7 +1,11 @@
 #!/usr/bin/env node
+
 const p = require('path');
-const commandLineArgs = require('command-line-args')
 const colors = require('colors');
+
+const commandLineArgs = require('command-line-args');
+const getUsage = require('command-line-usage');
+
 const ARROW = '\u2192';
 const INFINITY = '\u221E';
 
@@ -13,10 +17,50 @@ const optionDefinitions = [
     { name: 'offset', type: Number, defaultValue: 50, alias: 's'},
     { name: 'scan-to', type: Number, defaultValue: Infinity, alias: 'e'},
     { name: 'config', type: String, defaultValue: defaultConfigLocation, alias: 'c'},
-    { name: 'fail-fast', type: Boolean, defaultValue: false }
+    { name: 'fail-fast', type: Boolean, defaultValue: false },
+    { name: 'help', alias: 'h', type: Boolean }
 ];
 
 const options = commandLineArgs(optionDefinitions);
+
+if (options.help) {
+    console.log(getUsage([
+        {
+            header: 'File force harvester (IPFS-Ethereum)',
+            content: "Listening FileForce's  IPFS activity in Ethereum"
+        },
+        {
+            header: 'Options',
+            optionList: [
+                {
+                    name: 'mode',
+                    typeLabel: '[underline]{file|ectag|ecdtag}',
+                    description: 'Switch to specified ethereum contract events. [italic]{Default options.}'
+                },
+                {
+                    name: 'offset',
+                    typeLabel: '[underline]{block}',
+                    description: 'Listen from specified block'
+                },
+                {
+                    name: 'scan-to',
+                    typeLabel: '[underline]{block}',
+                    description: 'Listen to specified block. Default is infinity.'
+                },
+                {
+                    name: 'config',
+                    typeLabel: '[underline]{config-path}',
+                    description: 'Configuration file location.'
+                },
+                {
+                    name: 'fail-fast',
+                    description: 'Crashes process on error'
+                }
+            ]
+        }
+    ]));
+    process.exit(0);
+}
 
 // fileforce, ethereum and redundant
 
