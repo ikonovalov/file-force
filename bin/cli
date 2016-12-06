@@ -15,7 +15,12 @@ program
 program
     .command('account <subCommand> [arg]')
     .usage('<subCommand> [arg]')
-    .description('Ethereum account operations. Sub commands: ls [balance], keys <index or address>')
+    .description(
+        'Ethereum account operations.' +
+        '\n\t Subcommands:' +
+        '\n\t\t ls [balance]' +
+        '\n\t\t keys <index or address>'.red
+    )
     .action((subCommand, arg, options) => {
         switch (subCommand) {
             case account.ls.name: {
@@ -34,20 +39,28 @@ program
 
 // IPFS CMD
 program
-    .command('ipfs <command> [arg] [arg2]')
+    .command('ipfs <subCommand> <arg> [arg2]')
+    .usage('<subCommand> <arg> [arg2]')
     .description(
-        'IPFS files operations. Commands: ' +
-        'add <path>, cat <hash>, ' +
-        'ecTag <hash>, decryptEcTag <hash>, decrypt <hash>, delegate <hash> <pubkey> ' +
-        'fwatch <filter>, ecwatch <filter>, ecdwatch <filter>'
+        'IPFS files and tags operations.' +
+        '\n\t Subcommands: ' +
+        '\n\t\t add <file-path>' +
+        '\n\t\t cat <any-ipfs-hash>' +
+        '\n\t\t ecTag <ecTag-ipfs-hash>' +
+        '\n\t\t decryptEcTag <ecTag-ipfs-hash>'.red +
+        '\n\t\t decrypt <ecTag-ipfs-hash>' +
+        '\n\t\t delegate <ecTag-ipfs-hash> <party-pubkey>' +
+        '\n\t\t fwatch <filter>' +
+        '\n\t\t ecwatch <filter>' +
+        '\n\t\t ecdwatch <filter>'
     )
-    .action((command, arg, arg2) => {
+    .action((subCommand, arg, arg2) => {
 
         var nonEmptyObject = function (_arg) {
-            return arg ? JSON.parse(_arg) : {};
+            return _arg ? JSON.parse(_arg) : {};
         };
 
-        switch (command) {
+        switch (subCommand) {
             case ipfs.add.name: {
                 ipfs.add(arg);
                 break;
@@ -96,8 +109,11 @@ program
 
     });
 
-program.command('config [command] [arg]')
-    .description('File-force configuration. Command: show')
+program.command('config [subCmmand] [arg]')
+    .description('File-force configuration.'.bold +
+        '\n\t Subcommand:' +
+        '\n\t\t show'
+    )
     .action((command, arg, options) => {
        switch (command) {
            case config.show.name: {
