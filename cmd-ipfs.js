@@ -75,7 +75,7 @@ module.exports = {
             if (!error) {
                 let account = ecTag.partyAddress;
                 console.log(`Party account ${account}.`);
-                let password = ask.password(/*{ignoreConfig: true}*/);
+                let password = ask.password({ignoreConfig: true});
                 const selfKeyPair = fileForce.unlockKeys(account, password);
                 fileForce.decryptEcTag(ecTag, selfKeyPair, printObject);
             } else
@@ -87,8 +87,7 @@ module.exports = {
         fileForce.ecTagByHash(ecTagHash, (error, ecTag) => {
             if (!error) {
                 let account = ecTag.partyAddress;
-                console.log(`Party account ${account}.`);
-                let password = ask.password({ignoreConfig: true});
+                let password = ask.password({ignoreConfig: true, questionText: `Party account ${account}. Unlock passphrase: `});
                 const selfKeyPair = fileForce.unlockKeys(account, password);
                 fileForce.decryptEcTag(ecTag, selfKeyPair, (error, tag) => {
                     fileForce.decryptByTag(tag, process.stdout);
@@ -102,7 +101,7 @@ module.exports = {
         fileForce.ecTagByHash(ecTagHash, (error, ecTag) => {
                 let account = ecTag.partyAddress;
                 console.log(`Party account ${account}.`);
-                let password = ask.password(/*{ignoreConfig: true}*/);
+                let password = ask.password({ignoreConfig: true});
                 let selfKeyPair = fileForce.unlockKeys(account, password);
                 fileForce.delegateTag(ecTagHash, selfKeyPair, anotherPublic, (error, result) => {
                     if (!error) {
