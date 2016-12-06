@@ -9,10 +9,13 @@ const validator = require('validator');
 
 program
     .version('0.0.1')
-    .command('account <command> [arg]')
-    .description('Ethereum account operations. Commands: ls [balance], keys, config')
-    .action((command, arg, options) => {
-        switch (command) {
+    .usage('<command>');
+
+program
+    .command('account <subCommand> [arg]')
+    .description('Ethereum account operations. Sub commands: ls [balance], keys <index or address>, config')
+    .action((subCommand, arg, options) => {
+        switch (subCommand) {
             case account.ls.name: {
                 account.ls(arg, options);
                 break;
@@ -22,12 +25,13 @@ program
                 break;
             }
             default: {
-                console.log(`Command 'accounts ${command}' not found.`);
+                console.log(`Command 'accounts ${subCommand}' not found.`);
             }
         }
     });
 
-program.command('ipfs <command> [arg] [arg2]')
+program
+    .command('ipfs <command> [arg] [arg2]')
     .description(
         'IPFS files operations. Commands: ' +
         'add <path>, cat <hash>, ' +

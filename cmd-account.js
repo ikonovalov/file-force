@@ -14,27 +14,27 @@ const validator = require('validator');
 module.exports = {
     keys: (arg, options) => {
         if (!arg) {
-            console.log('Account not specified. Use account index or hex argument');
+            console.log('Account not specified. Use account index or address (hex)');
             return;
         }
 
         const dataDir = config.eth.datadir;
-        const numberInput = validator.isInt(arg);
         const ethAccounts = ethereum.listAccounts();
+        const numberInput = validator.isInt(arg);
 
-        if (arg > ethAccounts.length) {
+        if (numberInput && arg > ethAccounts.length) {
             console.log(`You have ${ethAccounts.length} accounts only. But your's input was ${arg}.`.red);
             return;
         }
 
         const account = numberInput ? ethAccounts[arg] : arg;
         if (numberInput) {
-            console.log(`Account ${account}`.red.bold)
+            console.log(`Account ${account}`)
         }
         let password = ask.password({ignoreConfig: true});
 
         const keys = ethereumKeys.keyPair(dataDir, account, password);
-        console.log(`Private key:\t${keys.privateKey.toString('hex')}`);
+        console.log(`Private key:\t${keys.privateKey.toString('hex')}`.red.bold);
         console.log(`Public key:\t${keys.publicKey.toString('hex')}`)
     },
 
@@ -44,7 +44,7 @@ module.exports = {
             (account, index) => {
                 let out = `[${index}] ${account}`;
                 if (account == coinbase) {
-                    console.log(`${out.red.bold} <- coinbase`)
+                    console.log(`${out.green.bold} <- coinbase`)
                 } else {
                     console.log(out)
                 }
