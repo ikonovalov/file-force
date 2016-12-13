@@ -2,6 +2,7 @@ default:
   ipfs:
     api: /ip4/127.0.0.1/tcp/5001
     enable-eth: true
+    advertising-level: medium
   eth:
     datadir: ~/.geth
     api: http://localhost:8545
