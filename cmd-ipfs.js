@@ -45,8 +45,8 @@ module.exports = {
         console.log(`Unlock ETH account ${account}`);
         const selfKeyPair = fileForce.unlockKeys(account, password);
 
-        let addPromise = fileForce.add(path, selfKeyPair, selfKeyPair.publicKey);
-        addPromise
+        fileForce
+            .add(path, selfKeyPair, selfKeyPair.publicKey)
             .then((result) => {
                 console.log('ecTag stored in IPFS');
                 console.log(`ecTag ${ARROW} ${result.hash} `.red.bold);
@@ -88,7 +88,10 @@ module.exports = {
         fileForce.ecTagByHash(ecTagHash, (error, ecTag) => {
             if (!error) {
                 let account = ecTag.partyAddress;
-                let password = ask.password({ignoreConfig: true, questionText: `Party account ${account}. Unlock passphrase: `});
+                let password = ask.password({
+                    ignoreConfig: true,
+                    questionText: `Party account ${account}. Unlock passphrase: `
+                });
                 const selfKeyPair = fileForce.unlockKeys(account, password);
                 fileForce.decryptEcTag(ecTag, selfKeyPair, (error, tag) => {
                     fileForce.decryptByTag(tag, process.stdout);
@@ -120,9 +123,7 @@ module.exports = {
         let startBlock = calculateStartBlockOffset(eventFilter);
         console.log(`Watching block range ${startBlock} ${ARROW} latest`.blue);
         fileForce.watchEvents(eventType.NewFileAppeared,
-            {
-
-            },
+            {},
             {
                 fromBlock: startBlock,
                 toBlock: 'latest'
@@ -141,18 +142,16 @@ module.exports = {
         console.log(`Watching block range ${startBlock} ${ARROW} latest`.blue);
 
         fileForce.watchEvents(eventType.EcTagRegistered,
-            {
-
-            },
+            {},
             {
                 fromBlock: startBlock,
                 toBlock: 'latest'
             },
             (error, event) => {
-            if (!error) {
-                console.log(FileForceEth.bnToMultihash58(event.args.ipfs));
+                if (!error) {
+                    console.log(FileForceEth.bnToMultihash58(event.args.ipfs));
+                }
             }
-        }
         )
     },
 
@@ -161,9 +160,7 @@ module.exports = {
         console.log(`Watching block range ${startBlock} ${ARROW} latest`.blue);
 
         fileForce.watchEvents(eventType.EcTagDelegated,
-            {
-
-            },
+            {},
             {
                 fromBlock: startBlock,
                 toBlock: 'latest'
