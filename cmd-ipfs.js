@@ -22,11 +22,8 @@ const ARROW = '\u2192';
 
 const EVENT_OFFSET = config.eth['event-offset'];
 
-function printObject(error, object) {
-    if (!error) {
-        console.log(JSON.stringify(object, null, 2))
-    } else
-        console.error(error)
+function printObject(object) {
+    console.log(JSON.stringify(object, null, 2))
 }
 
 function calculateStartBlockOffset(eventFilter) {
@@ -72,51 +69,70 @@ module.exports = {
     },
 
     decryptEcTag: (ecTagHash) => {
-        fileForce.ecTagByHash(ecTagHash, (error, ecTag) => {
-            if (!error) {
+        fileForce
+            .ecTagByHash(ecTagHash)
+            .then(ecTag => {
                 let account = ecTag.partyAddress;
                 console.log(`Party account ${account}.`);
                 let password = ask.password({ignoreConfig: true});
                 const selfKeyPair = fileForce.unlockKeys(account, password);
-                fileForce.decryptEcTag(ecTag, selfKeyPair, printObject);
-            } else
+                return {
+                    selfKeyPair: selfKeyPair,
+                    ecTag: ecTag
+                };
+
+            })
+            .then(result => {
+                return fileForce.decryptEcTag(result.ecTag, result.selfKeyPair);
+            })
+            .then(tag => {
+                printObject(tag)
+            })
+            .catch(error => {
                 console.error(error)
-        });
+            });
     },
 
     decrypt: (ecTagHash) => {
-        fileForce.ecTagByHash(ecTagHash, (error, ecTag) => {
-            if (!error) {
+        fileForce
+            .ecTagByHash(ecTagHash)
+            .then(ecTag => {
                 let account = ecTag.partyAddress;
                 let password = ask.password({
                     ignoreConfig: true,
                     questionText: `Party account ${account}. Unlock passphrase: `
                 });
                 const selfKeyPair = fileForce.unlockKeys(account, password);
-                fileForce.decryptEcTag(ecTag, selfKeyPair, (error, tag) => {
-                    fileForce.decryptByTag(tag, process.stdout);
-                });
-            } else
-                console.error(error)
-        });
+                fileForce
+                    .decryptEcTag(ecTag, selfKeyPair)
+                    .then(tag => {
+                        fileForce.decryptByTag(tag, process.stdout);
+                    });
+            })
+            .catch(error => {
+                console.log(error)
+            });
     },
 
     delegate: (ecTagHash, anotherPublic) => {
-        fileForce.ecTagByHash(ecTagHash, (error, ecTag) => {
-                let account = ecTag.partyAddress;
-                console.log(`Party account ${account}.`);
-                let password = ask.password({ignoreConfig: true});
-                let selfKeyPair = fileForce.unlockKeys(account, password);
-                fileForce.delegateTag(ecTagHash, selfKeyPair, anotherPublic, (error, result) => {
-                    if (!error) {
-                        console.log(`Origin ecTag ${result.hash} delegated to ${result.ecTag.partyAddress} with new ecTag ${result.hash}`.blue.bold);
-                        console.log(`Transfer  ${result.ecTag.ownerAddress} ${ARROW} ${result.ecTag.partyAddress} complete.`.blue.bold);
-                    } else {
-                        console.error(error)
-                    }
-                });
-            }
-        );
+        fileForce
+            .ecTagByHash(ecTagHash)
+            .then(ecTag => {
+                    let account = ecTag.partyAddress;
+                    console.log(`Party account ${account}.`);
+                    let password = ask.password({ignoreConfig: true});
+                    let selfKeyPair = fileForce.unlockKeys(account, password);
+                    fileForce
+                        .delegateTag(ecTagHash, selfKeyPair, anotherPublic)
+                        .then(result => {
+                            console.log(`Origin ecTag ${ecTagHash} delegated to ${result.ecTag.partyAddress} with new ecTag ${result.hash}`.blue.bold);
+                            console.log(`Transfer  ${result.ecTag.ownerAddress} ${ARROW} ${result.ecTag.partyAddress} complete.`.blue.bold);
+                        })
+                        .catch(error => {
+                            console.error(error)
+                        });
+                }
+            );
     },
 
     fwatch: (eventFilter = {}) => {
