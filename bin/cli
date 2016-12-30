@@ -5,7 +5,6 @@ const ipfs = require('./../cmd-ipfs');
 const config = require('./../cmd-config');
 const colors = require('colors');
 const program = require('commander');
-const validator = require('validator');
 
 program
     .version('0.2.0')
