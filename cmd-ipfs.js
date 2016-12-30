@@ -22,11 +22,8 @@ const ARROW = '\u2192';
 
 const EVENT_OFFSET = config.eth['event-offset'];
 
-function printObject(error, object) {
-    if (!error) {
-        console.log(JSON.stringify(object, null, 2))
-    } else
-        console.error(error)
+function printObject(object) {
+    console.log(JSON.stringify(object, null, 2))
 }
 
 function calculateStartBlockOffset(eventFilter) {
@@ -45,16 +42,17 @@ module.exports = {
         console.log(`Unlock ETH account ${account}`);
         const selfKeyPair = fileForce.unlockKeys(account, password);
 
-        fileForce.add(path, selfKeyPair, selfKeyPair.publicKey, (error, result) => {
-            if (!error) {
+        fileForce
+            .add(path, selfKeyPair, selfKeyPair.publicKey)
+            .then((result) => {
                 console.log('ecTag stored in IPFS');
                 console.log(`ecTag ${ARROW} ${result.hash} `.red.bold);
                 console.log('ecTag:');
                 console.log(`${JSON.stringify(result.ecTag, null, 2)}`.blue)
-            } else {
-                console.error(error)
-            }
-        });
+            })
+            .catch(error => {
+                console.error(error);
+            });
 
         // ecTag handled via final callback, but file's tag and hash handled vie event
         fileForce.once('IPFS#ADD#FILE', (hash, account) => {
@@ -71,57 +69,77 @@ module.exports = {
     },
 
     decryptEcTag: (ecTagHash) => {
-        fileForce.ecTagByHash(ecTagHash, (error, ecTag) => {
-            if (!error) {
+        fileForce
+            .ecTagByHash(ecTagHash)
+            .then(ecTag => {
                 let account = ecTag.partyAddress;
                 console.log(`Party account ${account}.`);
                 let password = ask.password({ignoreConfig: true});
                 const selfKeyPair = fileForce.unlockKeys(account, password);
-                fileForce.decryptEcTag(ecTag, selfKeyPair, printObject);
-            } else
+                return {
+                    selfKeyPair: selfKeyPair,
+                    ecTag: ecTag
+                };
+
+            })
+            .then(result => {
+                return fileForce.decryptEcTag(result.ecTag, result.selfKeyPair);
+            })
+            .then(tag => {
+                printObject(tag)
+            })
+            .catch(error => {
                 console.error(error)
-        });
+            });
     },
 
     decrypt: (ecTagHash) => {
-        fileForce.ecTagByHash(ecTagHash, (error, ecTag) => {
-            if (!error) {
+        fileForce
+            .ecTagByHash(ecTagHash)
+            .then(ecTag => {
                 let account = ecTag.partyAddress;
-                let password = ask.password({ignoreConfig: true, questionText: `Party account ${account}. Unlock passphrase: `});
-                const selfKeyPair = fileForce.unlockKeys(account, password);
-                fileForce.decryptEcTag(ecTag, selfKeyPair, (error, tag) => {
-                    fileForce.decryptByTag(tag, process.stdout);
+                let password = ask.password({
+                    ignoreConfig: true,
+                    questionText: `Party account ${account}. Unlock passphrase: `
                 });
-            } else
-                console.error(error)
-        });
+                const selfKeyPair = fileForce.unlockKeys(account, password);
+                fileForce
+                    .decryptEcTag(ecTag, selfKeyPair)
+                    .then(tag => {
+                        fileForce.decryptByTag(tag, process.stdout);
+                    });
+            })
+            .catch(error => {
+                console.log(error)
+            });
     },
 
     delegate: (ecTagHash, anotherPublic) => {
-        fileForce.ecTagByHash(ecTagHash, (error, ecTag) => {
-                let account = ecTag.partyAddress;
-                console.log(`Party account ${account}.`);
-                let password = ask.password({ignoreConfig: true});
-                let selfKeyPair = fileForce.unlockKeys(account, password);
-                fileForce.delegateTag(ecTagHash, selfKeyPair, anotherPublic, (error, result) => {
-                    if (!error) {
-                        console.log(`Origin ecTag ${result.hash} delegated to ${result.ecTag.partyAddress} with new ecTag ${result.hash}`.blue.bold);
-                        console.log(`Transfer  ${result.ecTag.ownerAddress} ${ARROW} ${result.ecTag.partyAddress} complete.`.blue.bold);
-                    } else {
-                        console.error(error)
-                    }
-                });
-            }
-        );
+        fileForce
+            .ecTagByHash(ecTagHash)
+            .then(ecTag => {
+                    let account = ecTag.partyAddress;
+                    console.log(`Party account ${account}.`);
+                    let password = ask.password({ignoreConfig: true});
+                    let selfKeyPair = fileForce.unlockKeys(account, password);
+                    fileForce
+                        .delegateTag(ecTagHash, selfKeyPair, anotherPublic)
+                        .then(result => {
+                            console.log(`Origin ecTag ${ecTagHash} delegated to ${result.ecTag.partyAddress} with new ecTag ${result.hash}`.blue.bold);
+                            console.log(`Transfer  ${result.ecTag.ownerAddress} ${ARROW} ${result.ecTag.partyAddress} complete.`.blue.bold);
+                        })
+                        .catch(error => {
+                            console.error(error)
+                        });
+                }
+            );
     },
 
     fwatch: (eventFilter = {}) => {
         let startBlock = calculateStartBlockOffset(eventFilter);
         console.log(`Watching block range ${startBlock} ${ARROW} latest`.blue);
         fileForce.watchEvents(eventType.NewFileAppeared,
-            {
-
-            },
+            {},
             {
                 fromBlock: startBlock,
                 toBlock: 'latest'
@@ -140,18 +158,16 @@ module.exports = {
         console.log(`Watching block range ${startBlock} ${ARROW} latest`.blue);
 
         fileForce.watchEvents(eventType.EcTagRegistered,
-            {
-
-            },
+            {},
             {
                 fromBlock: startBlock,
                 toBlock: 'latest'
             },
             (error, event) => {
-            if (!error) {
-                console.log(FileForceEth.bnToMultihash58(event.args.ipfs));
+                if (!error) {
+                    console.log(FileForceEth.bnToMultihash58(event.args.ipfs));
+                }
             }
-        }
         )
     },
 
@@ -160,9 +176,7 @@ module.exports = {
         console.log(`Watching block range ${startBlock} ${ARROW} latest`.blue);
 
         fileForce.watchEvents(eventType.EcTagDelegated,
-            {
-
-            },
+            {},
             {
                 fromBlock: startBlock,
                 toBlock: 'latest'
