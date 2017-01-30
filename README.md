@@ -68,6 +68,40 @@ fileForce.add(path, selfKeyPair, selfKeyPair.publicKey)
 
 ###CLI usage
 
+####Help
+```bash
+bin$ ./cli --help
+
+  Usage: cli <command>
+
+
+  Commands:
+
+    account <subCommand> [arg]      Ethereum account operations.
+    	 Subcommands:
+    		 ls [balance]
+    		 keys <index or address>
+    ipfs <subCommand> <arg> [arg2]  IPFS files and tags operations.
+    	 Subcommands: 
+    		 add <file-path>
+    		 cat <any-ipfs-hash>
+    		 ecTag <ecTag-ipfs-hash>
+    		 decryptEcTag <ecTag-ipfs-hash>
+    		 decrypt <ecTag-ipfs-hash>
+    		 delegate <ecTag-ipfs-hash> <party-pubkey>
+    		 fwatch <filter>
+    		 ecwatch <filter>
+    		 ecdwatch <filter>
+    config [subCmmand] [arg]        File-force configuration.
+    	 Subcommand:
+    		 show
+
+  Options:
+
+    -h, --help     output usage information
+    -V, --version  output the version number
+```
+
 ####Add file
 ```bash
 > bin$ ./cli ipfs add ../package.json 
