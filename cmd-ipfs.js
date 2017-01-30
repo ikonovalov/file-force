@@ -65,7 +65,7 @@ module.exports = {
     },
 
     ecTag: (ecTagHash) => {
-        fileForce.ecTagByHash(ecTagHash, printObject);
+        fileForce.ecTagByHash(ecTagHash).then(ecTag => printObject(ecTag)).catch(error => console.log(error.getMessage().red));
     },
 
     decryptEcTag: (ecTagHash) => {
@@ -198,11 +198,6 @@ module.exports = {
 
     /** EXPERIMENTAL !!! **/
     providers: (hash) => {
-        redundant.providers(hash, (e, v) => {
-            if (e) {
-                let withResponses = v.filter(e => e.Responses);
-                console.log(withResponses);
-            }
-        })
+        redundant.providers(hash).then(peers => console.log(peers)).catch(error => console.log(error))
     }
 };
