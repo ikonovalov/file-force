@@ -45,24 +45,26 @@ const FileForce = require('file-force');
 const fileForce = new FileForce(config);
 ```
 
-Add file (_encrypt file (AES) -> IPFS -> tag -> ecncrypt with ECDH + hKDF + AES -> ecTag -> IPFS_):
+Unlock keys:
 ```javascript
-// unlock keys
 let account = '0x7116673528278887d37038d93bd749b66110ec35';
 let password = '123321';
 let selfKeyPair = fileForce.unlockKeys(account, password);
+```
 
-// 
+Add file (_encrypt file (AES) -> IPFS -> tag -> encrypt with ECDH + hKDF + AES -> ecTag -> IPFS_):
+```javascript
+let path = '/tmp/some-your-file.txt';
 fileForce.add(path, selfKeyPair, selfKeyPair.publicKey)
          .then((result) => {
             let ipfsHash = result.hash;
             let ecTag = result.ecTag;
-            console.log(`ecTag ${ipfsHash});         
+            console.log(`ecTag ${ipfsHash}`);         
             console.log(`${JSON.stringify(ecTag, null, 2)}`);
          })
          .catch(error => console.error(error));
 ```
-
+_// TODO: Add stream sample and JSON object sample_
 
 ### Using with CLI
 
