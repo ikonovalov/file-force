@@ -36,7 +36,7 @@ development:
   eth:
     datadir: /mnt/u110/ethereum/pnet1
     account: '0x7116673528278887d37038d93bd749b66110ec35'
-    password: dlheu0
+    password: '123321'
     mother-contract: '0x8bdfcef3d5ec77a77985d07925b05e5f9302b9a8'
 ```
 Configure instance:
@@ -68,7 +68,7 @@ fileForce.add(path, selfKeyPair, selfKeyPair.publicKey)
 
 ###CLI usage
 
-Add file
+####Add file
 ```bash
 > bin$ ./cli ipfs add ../package.json 
 Unlock ETH account 0x7116673528278887d37038d93bd749b66110ec35
@@ -102,38 +102,43 @@ ecTag:
     }
   }
 }
+```
+
+#### Decrypt 
+```bash
+> bin$ ./cli ipfs decrypt Qmc6ku6FQRWSwJfiy8NZhoEXPDvKjt46MBPVPNyUnmxjQ5 > /tmp/dec.out
+Party account 0x7116673528278887d37038d93bd749b66110ec35. Unlock passphrase: ******
+```
+
+#### Delegate file
+```bash
+bin$ ./cli ipfs delegate Qmc6ku6FQRWSwJfiy8NZhoEXPDvKjt46MBPVPNyUnmxjQ5 04b7cb91f57ce522d7beea2927646d4056528b9abee0a9a285ff42e6f10d28ff8137a5f80e90388322dd0d1f195cd298e817e49cc11ee2fa29029566edf742f43f
+Party account 0x7116673528278887d37038d93bd749b66110ec35.
+Unlock account. Passphrase: ******
+Origin ecTag Qmc6ku6FQRWSwJfiy8NZhoEXPDvKjt46MBPVPNyUnmxjQ5 delegated to 0xc80671754c3fcd934089e909a4f7c947acd517a1 with new ecTag Qmas1vomBYLzNk8292HiAawyHsPhW7d4ceHGGsLnai7jky
+Transfer  0x7116673528278887d37038d93bd749b66110ec35 → 0xc80671754c3fcd934089e909a4f7c947acd517a1 complete.
+```
+#### Decrypt ecTag (unsecured)
+```bash
+bin$ ./cli ipfs decryptEcTag Qmc6ku6FQRWSwJfiy8NZhoEXPDvKjt46MBPVPNyUnmxjQ5
+Party account 0x7116673528278887d37038d93bd749b66110ec35.
+Unlock account. Passphrase: ******
+{
+  "algorithm": "aes-256-ctr",
+  "iv": "f0fa6e090a6c61b23a77d400349acdae",
+  "secret": "2e48ac1b9451735c6424844057cf518dd0a518b0599fa3407bc0c194fa456eb1",
+  "ipfs": "QmaoF83opyhUW5jqhQUVJnmgqDHGgQZv6B51myqY8drAk3",
+  "metadata": {
+    "mimeType": "application/octet-stream",
+    "filename": "package.json"
+  },
+  "signature": {
+    "v": 1,
+    "r": "c257be319d131a3456b2c41a14b894ec86416e0256b7c5ed44e7c951769c8008",
+    "s": "e293331261774b0e0a7d6af5b2192d1d3d7843e9f57c0ace4ee2692f82b46620"
+  }
+}
 
 ```
 
-Cat ecTag (this is a public info)
-<pre>
-./cli ipfs cat QmWr5AbnnpkfYiV88ioPcdpE7nPEUp5vCvrprwLCuKw8M5 | jq
-{
-  "ownerAddress": "0x7116673528278887d37038d93bd749b66110ec35",
-  "partyAddress": "0x7116673528278887d37038d93bd749b66110ec35",
-  "tag": "HJnJi4qLMrJfOcseM3CyHQKQQqkNevGZQg95qY90/z8br6qo2RfdqDPTlhf3NC+MQ3kdHdEVhjnai//cqxa97qqONaEIrUCDp2SI8ZwKm594qnA/U7QVUcvDTY+GK5nDZ8gFvjQhWTj1RBigdYyknz8wHMI6WlAVrNMle5yZHJEOH+P6611dSU1oATtyPZz8EJ3tlmd4RJGgU0ySW2bnA/JpRrD7fUvgLif2uVo7xFaA1wE65KqmQe7P908rgzkrg4fPueWleDmmXyAN+haSXsfLSHNwaEey9V6JQTczNuevIuXh6BL4me0BGeq+368eb4Eq1wf/IPK89Me+WyWK2wBYtB+i+FRgXeS4Iq8E4iHbAjO0FAxoU1D3X6swoFsj6W40xV6TACVs9khP9rYT/1dfzJk0+vAsD07RVto=",
-  "tagEncryption": {
-    "protocol": "ECDH",
-    "ownerPublicKey": "0x0401eb187902aaa78b9e33b1c2ab1367a0af14c71ed8a0c8e81d1cc5abd80c0c2d54a92af2ca02909d25bbb662b4039d1c9240924c6442921942849f31c4c31adc",
-    "kdf": {
-      "name": "hkdf",
-      "params": {
-        "hashAgl": "sha256",
-        "salt": "241eb0f0bb6382f9a75791fdb70c13c37966a8acae56b3a5ea931779e4c8db77",
-        "info": "file-force",
-        "size": 32
-      }
-    },
-    "encryption": {
-      "algorithm": "aes-256-ctr",
-      "iv": "832d46e0d6b4ce7b94670d7ec7406dc0"
-    }
-  }
-}
-</pre>
-
-Decrypt tag and file with ecTag
-<pre>
-./cli ipfs decrypt QmWr5AbnnpkfYiV88ioPcdpE7nPEUp5vCvrprwLCuKw8M5
-... file content in stdout
-</pre>
+### Harvester
