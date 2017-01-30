@@ -1,9 +1,10 @@
 # File Force
 
-Decentralized file sharing with:
+Decentralized anonymous encrypted object/file sharing tools powered by:
 * [IPFS](https://ipfs.io/) - decentralized file store (or network).
 * Elliptic curve cryptography (curve: [secp256k1](https://en.bitcoin.it/wiki/Secp256k1))
 * [ECDH](https://en.wikipedia.org/wiki/Elliptic_curve_Diffie%E2%80%93Hellman), [HKDF](https://tools.ietf.org/html/rfc5869) and [AES-256](https://ru.wikipedia.org/wiki/Advanced_Encryption_Standard)-[CTR](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Counter_.28CTR.29)
+* [Ethereum](https://www.ethereum.org/) (tracking and non-repudiation mechanism)
 
 ### Install 
 _package.json_
