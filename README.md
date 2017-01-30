@@ -71,7 +71,7 @@ _// TODO: Add stream sample and JSON object sample_
 
 ####Help
 ```bash
-> bin$ ./cli --help
+$ ./cli --help
 
   Usage: cli <command>
 
@@ -105,7 +105,7 @@ _// TODO: Add stream sample and JSON object sample_
 
 ####Add file
 ```bash
-> bin$ ./cli ipfs add ../package.json 
+$ ./cli ipfs add ../package.json 
 Unlock ETH account 0x7116673528278887d37038d93bd749b66110ec35
 File → QmaoF83opyhUW5jqhQUVJnmgqDHGgQZv6B51myqY8drAk3
 ecTag stored in IPFS
@@ -141,13 +141,13 @@ ecTag:
 
 #### Decrypt 
 ```bash
-> bin$ ./cli ipfs decrypt Qmc6ku6FQRWSwJfiy8NZhoEXPDvKjt46MBPVPNyUnmxjQ5 > /tmp/dec.out
+$ ./cli ipfs decrypt Qmc6ku6FQRWSwJfiy8NZhoEXPDvKjt46MBPVPNyUnmxjQ5 > /tmp/dec.out
 Party account 0x7116673528278887d37038d93bd749b66110ec35. Unlock passphrase: ******
 ```
 
 #### Delegate file
 ```bash
-bin$ ./cli ipfs delegate Qmc6ku6FQRWSwJfiy8NZhoEXPDvKjt46MBPVPNyUnmxjQ5 04b7cb91f57ce522d7beea2927646d4056528b9abee0a9a285ff42e6f10d28ff8137a5f80e90388322dd0d1f195cd298e817e49cc11ee2fa29029566edf742f43f
+$ ./cli ipfs delegate Qmc6ku6FQRWSwJfiy8NZhoEXPDvKjt46MBPVPNyUnmxjQ5 04b7cb91f57ce522d7beea2927646d4056528b9abee0a9a285ff42e6f10d28ff8137a5f80e90388322dd0d1f195cd298e817e49cc11ee2fa29029566edf742f43f
 Party account 0x7116673528278887d37038d93bd749b66110ec35.
 Unlock account. Passphrase: ******
 Origin ecTag Qmc6ku6FQRWSwJfiy8NZhoEXPDvKjt46MBPVPNyUnmxjQ5 delegated to 0xc80671754c3fcd934089e909a4f7c947acd517a1 with new ecTag Qmas1vomBYLzNk8292HiAawyHsPhW7d4ceHGGsLnai7jky
@@ -155,7 +155,7 @@ Transfer  0x7116673528278887d37038d93bd749b66110ec35 → 0xc80671754c3fcd934089e
 ```
 #### Decrypt ecTag (unsecured)
 ```bash
-bin$ ./cli ipfs decryptEcTag Qmc6ku6FQRWSwJfiy8NZhoEXPDvKjt46MBPVPNyUnmxjQ5
+$ ./cli ipfs decryptEcTag Qmc6ku6FQRWSwJfiy8NZhoEXPDvKjt46MBPVPNyUnmxjQ5
 Party account 0x7116673528278887d37038d93bd749b66110ec35.
 Unlock account. Passphrase: ******
 {
@@ -179,7 +179,7 @@ Unlock account. Passphrase: ******
 ### Harvester
 Harvester watches an Ethereum blockchain for a new files and/or new ecTag events.
 ```bash
-> bin$ ./harvester --help
+$ ./harvester --help
 
 File force harvester (IPFS-Ethereum)
 
