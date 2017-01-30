@@ -1,11 +1,9 @@
 # File Force
 
 Decentralized file sharing with:
-* IPFS - decentralized file store (or network).
-* Elliptic curve cryptography (curve: secp256k1)
-* ECDH (shared keys), HKDF (key derivation function) and AES-256-CTR
-
-#### License: [LGPL-3.0](https://github.com/ikonovalov/file-force/blob/master/LICENSE)
+* [IPFS](https://ipfs.io/) - decentralized file store (or network).
+* Elliptic curve cryptography (curve: [secp256k1](https://en.bitcoin.it/wiki/Secp256k1))
+* [ECDH](https://en.wikipedia.org/wiki/Elliptic_curve_Diffie%E2%80%93Hellman), [HKDF](https://tools.ietf.org/html/rfc5869) and [AES-256](https://ru.wikipedia.org/wiki/Advanced_Encryption_Standard)-[CTR](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Counter_.28CTR.29)
 
 ### Install 
 _package.json_
@@ -19,7 +17,7 @@ _package.json_
 > npm install
 ```
 
-### Use in Node.js
+### Use in Node.js 
 Configuration _app.yml_ for _yaml-config_ module
 ```yaml
 default:
@@ -66,11 +64,11 @@ fileForce.add(path, selfKeyPair, selfKeyPair.publicKey)
 ```
 
 
-###CLI usage
+### Using with CLI
 
 ####Help
 ```bash
-bin$ ./cli --help
+> bin$ ./cli --help
 
   Usage: cli <command>
 
@@ -176,3 +174,22 @@ Unlock account. Passphrase: ******
 ```
 
 ### Harvester
+Harvester watches an Ethereum blockchain for a new files and/or new ecTag events.
+```bash
+> bin$ ./harvester --help
+
+File force harvester (IPFS-Ethereum)
+
+  Listening FileForce's  IPFS activity in Ethereum 
+
+Options
+
+  --mode file|ectag|ecdtag   Switch to specified ethereum contract events. Default options. 
+  --offset block             Listen from specified block                                    
+  --scan-to block            Listen to specified block. Default is infinity.                
+  --config config-path       Configuration file location.                                   
+  --fail-fast                Crashes process on error 
+```
+
+## License
+[LGPL-3.0](https://github.com/ikonovalov/file-force/blob/master/LICENSE)
