@@ -24,7 +24,7 @@
     "commander": "^2.9.0",
     "ethereumjs-tx": "^1.2.5",
     "ethereumjs-util": "^5.1.1",
-    "ipfs-api": "^12.1.5",
+    "ipfs-api": "^12.1.7",
     "keythereum": "0.3.2",
     "node-hkdf-sync": "^1.0.0",
     "readline-sync": "^1.4.5",
