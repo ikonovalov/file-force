@@ -69,7 +69,7 @@ _// TODO: Add stream sample and JSON object sample_
 
 ### Using with CLI
 
-####Help
+#### Help
 ```bash
 $ ./cli --help
 
@@ -103,7 +103,7 @@ $ ./cli --help
     -V, --version  output the version number
 ```
 
-####Add file
+#### Add file
 ```bash
 $ ./cli ipfs add ../package.json 
 Unlock ETH account 0x7116673528278887d37038d93bd749b66110ec35
@@ -195,4 +195,4 @@ Options
 ```
 
 ## License
-[LGPL-3.0](https://github.com/ikonovalov/file-force/blob/master/LICENSE)
+[Apache-2.0](https://github.com/ikonovalov/file-force/blob/master/LICENSE)
