@@ -1,57 +1,4 @@
 
-Skip to content
-This repository
-
-    Pull requests
-    Issues
-    Gist
-
-    @ikonovalov
-
-1
-2
-
-    1
-
-ikonovalov/file-force
-Code
-Issues 0
-Pull requests 0
-Projects 0
-Wiki
-Pulse
-Graphs
-Settings
-file-force/LICENSE
-
-ikonovalov/file-force is licensed under the
-Apache License 2.0
-
-A permissive license whose main conditions require preservation of copyright and license notices. Contributors provide an express grant of patent rights. Licensed works, modifications, and larger works may be distributed under different terms and without source code.
-Permissions
-
-    Commercial use
-    Modification
-    Distribution
-    Patent use
-    Private use
-
-Conditions
-
-    License and copyright notice
-    State changes
-
-Limitations
-
-    Trademark use
-    Liability
-    Warranty
-
-This is not legal advice. Learn more about repository licenses.
-f75d5b4 8 days ago
-@ikonovalov ikonovalov Change year.
-203 lines (169 sloc) 11.1 KB
-
                                  Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -240,7 +187,7 @@ f75d5b4 8 days ago
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright 2017 Igor Konovalov.
+   Copyright 2017 Igor Konovalov
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -253,8 +200,3 @@ f75d5b4 8 days ago
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-
-    Contact GitHub API Training Shop Blog About
-
-    © 2017 GitHub, Inc. Terms Privacy Security Status Help
-
