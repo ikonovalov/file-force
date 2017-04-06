@@ -15,23 +15,23 @@
   "bin": {
     "fforce": "./bin/cli"
   },
-  "license": "LGPL-3.0",
+  "license": "Apache-2.0",
   "dependencies": {
-    "bignumber.js": "^3.0.0",
+    "bignumber.js": "3.0.0",
     "colors": "^1.1.2",
     "command-line-args": "^3.0.4",
     "command-line-usage": "^3.0.8",
     "commander": "^2.9.0",
-    "ethereumjs-tx": "^1.1.4",
-    "ethereumjs-util": "^4.5.0",
-    "ipfs-api": "^9.0.0",
-    "keythereum": "^0.2.6",
-    "multihash": "^0.1.0",
-    "node-hkdf-sync": "^1.0.0",
-    "readline-sync": "^1.4.5",
-    "streamifier": "^0.1.1",
+    "ethereumjs-tx": "1.1.4",
+    "ethereumjs-util": "4.5.0",
+    "ipfs-api": "9.0.0",
+    "keythereum": "0.2.6",
+    "multihash": "0.1.0",
+    "node-hkdf-sync": "1.0.0",
+    "readline-sync": "1.4.5",
+    "streamifier": "0.1.1",
     "tmp": "0.0.29",
     "web3": "0.18.2",
-    "yaml-config": "^0.3.0"
+    "yaml-config": "0.3.0"
   }
 }

@@ -5,7 +5,7 @@ Decentralized file sharing with:
 * Elliptic curve cryptography (curve: secp256k1)
 * ECDH (shared keys), HKDF (key derivation function) and AES-256-CTR
 
-#### License: LGPL-3.0
+#### License: Apache-2.0
 
 _package.json_
 <pre>
