@@ -81,7 +81,7 @@ module.exports = {
     },
 
     ecTag: (ecTagHash) => {
-        fileForce.ecTagByHash(ecTagHash, printObject);
+        fileForce.ecTagByHash(ecTagHash).then(ecTag => printObject(ecTag)).catch(error => console.log(error.getMessage().red));
     },
 
     decryptEcTag: (ecTagHash) => {
