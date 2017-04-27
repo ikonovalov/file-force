@@ -48,6 +48,7 @@ program
         '\n\t\t ecTag <ecTag-ipfs-hash>' +
         '\n\t\t decryptEcTag <ecTag-ipfs-hash>'.red +
         '\n\t\t decrypt <ecTag-ipfs-hash>' +
+        '\n\t\t signature <ecTag-ipfs-hash>' +
         '\n\t\t delegate <ecTag-ipfs-hash> <party-pubkey>' +
         '\n\t\t fwatch <filter>' +
         '\n\t\t ecwatch <filter>' +
@@ -82,6 +83,10 @@ program
             }
             case ipfs.delegate.name: {
                 ipfs.delegate(arg, arg2);
+                break;
+            }
+            case ipfs.signature.name: {
+                ipfs.signature(arg);
                 break;
             }
             case ipfs.fwatch.name: {

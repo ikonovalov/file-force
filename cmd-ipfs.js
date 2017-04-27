@@ -8,6 +8,7 @@ const validator = require('validator');
 const fs = require('fs');
 const tmp = require('tmp');
 const colors = require('colors');
+const ethUtils = require('ethereumjs-util');
 
 const FileForce = require('./lib/libfileforce');
 const FileForceEth = require('./lib/libfileforce-eth');
@@ -66,6 +67,35 @@ module.exports = {
 
     ecTag: (ecTagHash) => {
         fileForce.ecTagByHash(ecTagHash).then(ecTag => printObject(ecTag)).catch(error => console.log(error.getMessage().red));
+    },
+
+    signature: (ecTagHash) => {
+        fileForce
+            .ecTagByHash(ecTagHash)
+            .then(ecTag => {
+                let account = ecTag.partyAddress;
+                console.log(`Decrypting tag... Party account ${account}.`);
+                let password = ask.password({ignoreConfig: true});
+                const selfKeyPair = fileForce.unlockKeys(account, password);
+                return {
+                    selfKeyPair: selfKeyPair,
+                    ecTag: ecTag
+                };
+
+            })
+            .then(result => fileForce.decryptEcTag(result.ecTag, result.selfKeyPair))
+            .then(tag => fileForce.verifyByTag(tag))
+            .then(verificationResult => {
+                console.log(`Author public key: ${verificationResult.authorPublicKey}`);
+                console.log(`Author address: ${verificationResult.authorAddress}`);
+                console.log(`Signature: `);
+                console.log(`\tv: ${ethUtils.addHexPrefix(verificationResult.signature.v)}`);
+                console.log(`\tr: ${ethUtils.addHexPrefix(verificationResult.signature.r)}`);
+                console.log(`\ts: ${ethUtils.addHexPrefix(verificationResult.signature.s)}`);
+                console.log(`Digest | IPFS hash: ${verificationResult.digest}`);
+                console.log(verificationResult.validationResult ? "SIGNATURE VALID".bold.green : "SIGNATURE INVALID".bold.red);
+            })
+            .catch(e => console.log(e));
     },
 
     decryptEcTag: (ecTagHash) => {
