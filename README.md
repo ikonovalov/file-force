@@ -7,13 +7,13 @@ Decentralized anonymous encrypted object/file sharing tools powered by:
 * [Ethereum](https://www.ethereum.org/) (tracking and non-repudiation mechanism)
 
 ### Install 
-_package.json_
+First you need to get _file-force_ into your project. You can use npm and package.json.
 ```json
 "dependencies": {
      "file-force": "https://github.com/ikonovalov/file-force.git"
 }
 ```
-   
+...and 
 ```bash
 > npm install
 ```
@@ -89,6 +89,7 @@ $ ./cli --help
     		 ecTag <ecTag-ipfs-hash>
     		 decryptEcTag <ecTag-ipfs-hash>
     		 decrypt <ecTag-ipfs-hash>
+    		 signature <ecTag-ipfs-hash>
     		 delegate <ecTag-ipfs-hash> <party-pubkey>
     		 fwatch <filter>
     		 ecwatch <filter>
@@ -139,12 +140,26 @@ ecTag:
 }
 ```
 
-#### Decrypt 
+#### Decrypt file
+Decrypt tag from specified ecTag. Then decrypt file and redirect output to a file.
 ```bash
 $ ./cli ipfs decrypt Qmc6ku6FQRWSwJfiy8NZhoEXPDvKjt46MBPVPNyUnmxjQ5 > /tmp/dec.out
 Party account 0x7116673528278887d37038d93bd749b66110ec35. Unlock passphrase: ******
 ```
-
+#### View and validate signature
+```bash
+$ ./cli ipfs signature QmeNXV5b5gxJRvAVv5TX3BPQzqnG36fTa5PdVXvtRXANWn
+Decrypting tag... Party account 0x7116673528278887d37038d93bd749b66110ec35.
+Unlock account. Passphrase: ******
+Author public key: 0x0401eb187902aaa78b9e33b1c2ab1367a0af14c71ed8a0c8e81d1cc5abd80c0c2d54a92af2ca02909d25bbb662b4039d1c9240924c6442921942849f31c4c31adc
+Author address: 0x7116673528278887d37038d93bd749b66110ec35
+Signature: 
+	v: 1
+	r: 0x9f8c23022f87140a5f693451d57db3472c928a814e28bc8f37276131e9c3d41b
+	s: 0x7d2a83453c0c6ef19efefbeb5e6ea125eaa985f289fb1b1d185d1c429611f994
+Digest | IPFS hash: QmP5RbHSq2j3ioKe7hs8raQ8JJaGCrpKWPMTV657LFZotD
+SIGNATURE VALID
+```
 #### Delegate file
 ```bash
 $ ./cli ipfs delegate Qmc6ku6FQRWSwJfiy8NZhoEXPDvKjt46MBPVPNyUnmxjQ5 04b7cb91f57ce522d7beea2927646d4056528b9abee0a9a285ff42e6f10d28ff8137a5f80e90388322dd0d1f195cd298e817e49cc11ee2fa29029566edf742f43f
