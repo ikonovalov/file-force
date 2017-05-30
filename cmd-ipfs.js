@@ -91,7 +91,7 @@ module.exports = {
             .then(ecTag => {
                 let account = ecTag.partyAddress;
                 console.log(`Decrypting tag... Party account ${account}.`);
-                let password = ask.password({ignoreConfig: true});
+                let password = 'dlheu0' || ask.password({ignoreConfig: true});
                 const selfKeyPair = fileForce.unlockKeys(account, password);
                 return {
                     selfKeyPair: selfKeyPair,
