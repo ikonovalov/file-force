@@ -1,7 +1,7 @@
 {
   "name": "file-force",
-  "version": "0.3.2",
-  "description": "",
+  "version": "0.3.4",
+  "description": "Decentralized anonymous encrypted object/file sharing tools.",
   "author": "Igor Konovalov",
   "main": "cli.js",
   "repository": {
@@ -15,7 +15,7 @@
   "bin": {
     "fforce": "./bin/cli"
   },
-  "license": "LGPL-3.0",
+  "license": "Apache-2.0",
   "dependencies": {
     "bignumber.js": "^3.0.0",
     "colors": "^1.1.2",
