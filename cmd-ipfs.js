@@ -146,12 +146,9 @@ module.exports = {
                     questionText: `Party account ${account}. Unlock passphrase: `
                 });
                 const selfKeyPair = fileForce.unlockKeys(account, password);
-                fileForce
-                    .decryptEcTag(ecTag, selfKeyPair)
-                    .then(tag => {
-                        fileForce.decryptByTag(tag, process.stdout);
-                    });
+                return fileForce.decryptEcTag(ecTag, selfKeyPair)
             })
+            .then(tag => fileForce.decryptByTag(tag, process.stdout))
             .catch(error => {
                 console.log(error)
             });
